@@ -86,18 +86,20 @@ const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:        #07090f;
-    --surface:   #0e1118;
-    --surface2:  #151b27;
-    --surface3:  #1c2538;
+    --bg:        #F5F5F5;
+    --surface:   #F5F5F5;
+    --surface2:  #F4F5FF;
+    --surface3:  #F4F5FF;
+    --surface4:  #FFFFFF;
+    --surface5:  #F5F5F5;
     --border:    #1f2d44;
     --accent:    #00e5a0;
     --accent2:   #0099ff;
     --accent3:   #ff6b6b;
     --warn:      #ffb830;
-    --text:      #e8edf5;
-    --text2:     #8a9ab5;
-    --text3:     #4e5f7a;
+    --text:      #000000;
+    --text2:     #000000;
+    --text3:     #000000;
     --radius:    12px;
     --font:      'Syne', sans-serif;
     --mono:      'Fira Code', monospace;
@@ -183,7 +185,7 @@ const CSS = `
 
   /* ── CARDS ── */
   .card {
-    background: var(--surface); border: 1px solid var(--border);
+    background: var(--surface4); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px;
   }
   .card-label { font-size: 10px; letter-spacing: 2px; color: var(--text3); font-family: var(--mono); margin-bottom: 6px; }
@@ -216,7 +218,7 @@ const CSS = `
   .input-group { display: flex; flex-direction: column; gap: 6px; }
   .input-label { font-size: 11px; color: var(--text2); font-family: var(--mono); letter-spacing:1px; }
   .input, select.input, textarea.input {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface5); border: 1px solid var(--border); border-radius: 8px;
     color: var(--text); padding: 10px 14px; font-family: var(--font); font-size: 13px;
     outline: none; transition: border-color .2s; width:100%;
   }
@@ -239,11 +241,11 @@ const CSS = `
     padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
     font-family: var(--mono); white-space: nowrap;
   }
-  .badge-green  { background: rgba(0,229,160,.12); color: var(--accent); border: 1px solid rgba(0,229,160,.2); }
-  .badge-blue   { background: rgba(0,153,255,.12); color: var(--accent2); border: 1px solid rgba(0,153,255,.2); }
-  .badge-red    { background: rgba(255,107,107,.12); color: var(--accent3); border: 1px solid rgba(255,107,107,.2); }
-  .badge-warn   { background: rgba(255,184,48,.12); color: var(--warn); border: 1px solid rgba(255,184,48,.2); }
-  .badge-gray   { background: rgba(78,95,122,.15); color: var(--text2); border: 1px solid var(--border); }
+  .badge-green  { color: var(--accent); border: 1px solid rgba(0,229,160,.2); }
+  .badge-blue   { color: var(--accent2); border: 1px solid rgba(0,153,255,.2); }
+  .badge-red    { color: var(--accent3); border: 1px solid rgba(255,107,107,.2); }
+  .badge-warn   { color: var(--warn); border: 1px solid rgba(255,184,48,.2); }
+  .badge-gray   { color: var(--text2); border: 1px solid var(--border); }
 
   /* ── FORMS ── */
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -344,7 +346,7 @@ const CSS = `
   .login-incn { font-size:11px; color:var(--text3); text-align:center; font-family:var(--mono); }
 
   /* ── CHART CARD ── */
-  .chart-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+  .chart-card { background:var(--surface4); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
   .chart-title { font-size:13px; font-weight:600; margin-bottom:16px; }
   .chart-sub { font-size:10px; color:var(--text2); font-family:var(--mono); margin-top:4px; }
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
@@ -395,9 +397,9 @@ const CSS = `
   .modal-title { font-size:18px; font-weight:700; margin-bottom:24px; }
 
   /* ── RECOMEND CHIP ── */
-  .rec-up   { color:var(--accent);  background:rgba(0,229,160,.1);  border:1px solid rgba(0,229,160,.2); }
-  .rec-keep { color:var(--warn);    background:rgba(255,184,48,.1); border:1px solid rgba(255,184,48,.2); }
-  .rec-down { color:var(--accent3); background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2); }
+  .rec-up   { color:var(--accent);  border:1px solid rgba(0,229,160,.2); }
+  .rec-keep { color:var(--warn); border:1px solid rgba(255,184,48,.2); }
+  .rec-down { color:var(--accent3); border:1px solid rgba(255,107,107,.2); }
 `;
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
@@ -711,7 +713,7 @@ function DashboardPage({ patients, notifications, setPage, setSelected }: {
 // ── PATIENTS PAGE ─────────────────────────────────────────────────────────────
 function PatientsPage({ patients, setPage, setSelected }: {
     patients: Patient[],
-    
+
     setPage: (p: Page) => void,
     setSelected: (id: string) => void,
     setPatients: (ps: Patient[]) => void
@@ -1152,10 +1154,6 @@ function LiveSessionPage({ patients }: { patients: Patient[] }) {
                                         <span style={{ fontSize: 12, color: "var(--text2)" }}>Recomendación dificultad</span>
                                         <span className={`badge ${recClass(lastSession.recomendacion)}`}>{recIcon(lastSession.recomendacion)} {lastSession.recomendacion}</span>
                                     </div>
-                                    <div className="alert alert-green" style={{ marginTop: 14, fontSize: 11 }}>
-                                        <span>🤖</span>
-                                        Modelo SVM · Clasificación completada en &lt;3s. Historial del paciente incluido como insumo.
-                                    </div>
                                 </>
                             ) : (
                                 <div style={{ color: "var(--text3)", fontSize: 12, fontFamily: "var(--mono)" }}>Esperando finalización del nivel…</div>
@@ -1413,11 +1411,11 @@ export default function App() {
         dashboard: { title: "Dashboard", sub: "Vista general del sistema AREMEC" },
         patients: { title: "Gestión de Pacientes", sub: "Registro, consulta y edición de pacientes" },
         "patient-detail": { title: "Dashboard del Paciente", sub: "Métricas, historial y análisis cognitivo individual" },
-        "patient-new": { title: "Registrar Nuevo Paciente", sub: "HU-05 · Complete los datos clínicos iniciales" },
-        "patient-edit": { title: "Editar Paciente", sub: "HU-07 · Actualice la información clínica" },
-        "session-live": { title: "Sesión en Vivo", sub: "HU-21 · Transmisión en tiempo real · Agora RTC" },
-        "session-history": { title: "Historial de Sesiones", sub: "HU-24 · Registro cronológico de sesiones inmersivas" },
-        analytics: { title: "Tendencias Cognitivas", sub: "HU-25 · Gráficos de evolución por dominio cognitivo" },
+        "patient-new": { title: "Registrar Nuevo Paciente", sub: "Complete los datos clínicos iniciales" },
+        "patient-edit": { title: "Editar Paciente", sub: "Actualice la información clínica" },
+        "session-live": { title: "Sesión en Vivo", sub: "Transmisión en tiempo real" },
+        "session-history": { title: "Historial de Sesiones", sub: "Registro cronológico de sesiones inmersivas" },
+        analytics: { title: "Tendencias Cognitivas", sub: "Gráficos de evolución por dominio cognitivo" },
     };
 
     const inactiveLeft = Math.max(0, 900 - inactiveTimer);
@@ -1443,9 +1441,7 @@ export default function App() {
                         notifications={notifications}
                         onLogout={() => setAuthed(false)}
                         actions={
-                            page === "patients" ? (
-                                <button className="btn btn-primary btn-sm" onClick={() => setPage("patient-new")}>+ Nuevo Paciente</button>
-                            ) : page === "patient-detail" && selectedPatient ? (
+                            page === "patient-detail" && selectedPatient ? (
                                 <button className="btn btn-ghost btn-sm" onClick={() => setPage("patients")}>← Pacientes</button>
                             ) : undefined
                         }
