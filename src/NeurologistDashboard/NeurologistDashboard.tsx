@@ -6,7 +6,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 type Page =
     | "login"
     | "forgot"
-    | "dashboard"
     | "patients"
     | "patient-detail"
     | "patient-new"
@@ -79,328 +78,6 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 ];
 
 // ─── STYLES (CSS-in-JS via injected <style>) ─────────────────────────────────
-
-const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg:        #F5F5F5;
-    --surface:   #F5F5F5;
-    --surface2:  #F4F5FF;
-    --surface3:  #F4F5FF;
-    --surface4:  #FFFFFF;
-    --surface5:  #F5F5F5;
-    --border:    #1f2d44;
-    --accent:    #00e5a0;
-    --accent2:   #0099ff;
-    --accent3:   #ff6b6b;
-    --warn:      #ffb830;
-    --text:      #000000;
-    --text2:     #000000;
-    --text3:     #000000;
-    --radius:    12px;
-    --font:      'Syne', sans-serif;
-    --mono:      'Fira Code', monospace;
-    --shadow:    0 8px 32px rgba(0,0,0,0.5);
-  }
-
-  html, body, #root { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* ── LAYOUT ── */
-  .app-shell { display: flex; height: 100vh; overflow: hidden; }
-  .sidebar {
-    width: 240px; min-width: 240px; background: var(--surface);
-    border-right: 1px solid var(--border); display: flex; flex-direction: column;
-    padding: 0; overflow: hidden; position: relative;
-  }
-  .sidebar::after {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-
-  /* ── LOGO ── */
-  .sidebar-logo {
-    padding: 28px 24px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .logo-title {
-    font-size: 22px; font-weight: 800; letter-spacing: 3px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .logo-sub { font-size: 9px; color: var(--text3); letter-spacing: 2px; font-family: var(--mono); margin-top: 2px; }
-
-  /* ── NAV ── */
-  .nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
-  .nav-label { font-size: 9px; letter-spacing: 2px; color: var(--text3); padding: 12px 12px 4px; font-family: var(--mono); }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px;
-    cursor: pointer; transition: all .2s; font-size: 13px; color: var(--text2); font-weight: 500;
-    border: 1px solid transparent; position: relative;
-  }
-  .nav-item:hover { background: var(--surface2); color: var(--text); }
-  .nav-item.active { background: var(--surface3); color: var(--accent); border-color: var(--border); }
-  .nav-item.active::before {
-    content:''; position:absolute; left:-12px; top:50%; transform:translateY(-50%);
-    width:3px; height:60%; background: var(--accent); border-radius:0 2px 2px 0;
-  }
-  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-  .nav-badge {
-    margin-left: auto; background: var(--accent3); color: white;
-    font-size: 10px; border-radius: 10px; padding: 1px 6px; font-family: var(--mono);
-  }
-
-  /* ── SIDEBAR USER ── */
-  .sidebar-user {
-    padding: 16px; border-top: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px; cursor: pointer;
-  }
-  .avatar {
-    width: 36px; height: 36px; border-radius: 50%; background: var(--surface3);
-    display: flex; align-items: center; justify-content: center; font-size: 14px;
-    font-weight: 700; color: var(--accent); border: 1.5px solid var(--border); flex-shrink:0;
-  }
-  .user-name { font-size: 12px; font-weight: 600; color: var(--text); }
-  .user-role { font-size: 10px; color: var(--text3); font-family: var(--mono); }
-
-  /* ── TOPBAR ── */
-  .topbar {
-    padding: 16px 32px; background: var(--surface); border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-  }
-  .page-title { font-size: 20px; font-weight: 700; }
-  .page-sub { font-size: 12px; color: var(--text2); margin-top: 2px; font-family: var(--mono); }
-  .topbar-actions { display: flex; gap: 10px; align-items: center; }
-
-  /* ── PAGE CONTENT ── */
-  .page { padding: 28px 32px; flex: 1; }
-
-  /* ── CARDS ── */
-  .card {
-    background: var(--surface4); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px;
-  }
-  .card-label { font-size: 10px; letter-spacing: 2px; color: var(--text3); font-family: var(--mono); margin-bottom: 6px; }
-  .card-value { font-size: 28px; font-weight: 800; color: var(--text); }
-  .card-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
-
-  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
-  .stat-accent { border-top: 2px solid var(--accent); }
-  .stat-blue   { border-top: 2px solid var(--accent2); }
-  .stat-warn   { border-top: 2px solid var(--warn); }
-  .stat-red    { border-top: 2px solid var(--accent3); }
-
-  /* ── BUTTONS ── */
-  .btn {
-    padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;
-    font-family: var(--font); font-size: 13px; font-weight: 600; transition: all .2s; display:inline-flex; align-items:center; gap:6px;
-  }
-  .btn-primary { background: var(--accent); color: #000; }
-  .btn-primary:hover { background: #00ffc0; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,229,160,.3); }
-  .btn-secondary { background: var(--surface3); color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
-  .btn-ghost:hover { color: var(--text); background: var(--surface2); }
-  .btn-danger { background: var(--accent3); color: white; }
-  .btn-danger:hover { background: #ff4040; }
-  .btn-sm { padding: 6px 12px; font-size: 11px; }
-  .btn-icon { width:36px; height:36px; padding:0; justify-content:center; border-radius:8px; }
-
-  /* ── INPUT ── */
-  .input-group { display: flex; flex-direction: column; gap: 6px; }
-  .input-label { font-size: 11px; color: var(--text2); font-family: var(--mono); letter-spacing:1px; }
-  .input, select.input, textarea.input {
-    background: var(--surface5); border: 1px solid var(--border); border-radius: 8px;
-    color: var(--text); padding: 10px 14px; font-family: var(--font); font-size: 13px;
-    outline: none; transition: border-color .2s; width:100%;
-  }
-  .input:focus, select.input:focus, textarea.input:focus { border-color: var(--accent); }
-  select.input option { background: var(--surface2); }
-
-  /* ── TABLE ── */
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  thead tr { border-bottom: 1px solid var(--border); }
-  th { text-align: left; padding: 10px 14px; color: var(--text3); font-size: 10px; letter-spacing: 2px; font-family: var(--mono); font-weight: 500; white-space:nowrap; }
-  td { padding: 12px 14px; border-bottom: 1px solid rgba(31,45,68,.5); vertical-align: middle; }
-  tbody tr { transition: background .15s; cursor:pointer; }
-  tbody tr:hover { background: var(--surface2); }
-  tbody tr:last-child td { border-bottom: none; }
-
-  /* ── BADGES ── */
-  .badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
-    font-family: var(--mono); white-space: nowrap;
-  }
-  .badge-green  { color: var(--accent); border: 1px solid rgba(0,229,160,.2); }
-  .badge-blue   { color: var(--accent2); border: 1px solid rgba(0,153,255,.2); }
-  .badge-red    { color: var(--accent3); border: 1px solid rgba(255,107,107,.2); }
-  .badge-warn   { color: var(--warn); border: 1px solid rgba(255,184,48,.2); }
-  .badge-gray   { color: var(--text2); border: 1px solid var(--border); }
-
-  /* ── FORMS ── */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .form-grid .span2 { grid-column: span 2; }
-  .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; }
-
-  /* ── SEARCH ── */
-  .search-row { display:flex; gap:12px; align-items:center; margin-bottom:20px; }
-  .search-wrap { position:relative; flex:1; }
-  .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:14px; }
-  .search-input { padding-left:36px !important; }
-
-  /* ── SECTION HEADER ── */
-  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-  .section-title { font-size:16px; font-weight:700; }
-  .section-sub { font-size:11px; color:var(--text2); font-family:var(--mono); margin-top:2px; }
-
-  /* ── PATIENT CARD (grid) ── */
-  .patients-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
-  .patient-card {
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    padding:20px; cursor:pointer; transition: all .2s;
-  }
-  .patient-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:var(--shadow); }
-  .patient-card-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-  .patient-avatar {
-    width:44px; height:44px; border-radius:50%; background:var(--surface3);
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px; font-weight:700; color:var(--accent2); flex-shrink:0;
-  }
-  .patient-name { font-size:14px; font-weight:600; }
-  .patient-meta { font-size:11px; color:var(--text2); font-family:var(--mono); margin-top:2px; }
-  .patient-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px; }
-  .patient-stat { text-align:center; }
-  .ps-val { font-size:18px; font-weight:800; color:var(--accent); }
-  .ps-lbl { font-size:9px; color:var(--text3); font-family:var(--mono); }
-
-  /* ── LIVE STREAM ── */
-  .live-wrapper { background:#000; border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; position:relative; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; }
-  .live-badge { position:absolute; top:14px; left:14px; background:var(--accent3); color:white; font-size:10px; font-weight:700; padding:3px 10px; border-radius:4px; display:flex; align-items:center; gap:5px; animation: pulse-badge 1.5s infinite; }
-  @keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:.6} }
-  .live-dot { width:7px; height:7px; border-radius:50%; background:white; }
-  .live-placeholder { color:var(--text3); font-family:var(--mono); font-size:13px; text-align:center; }
-
-  /* ── METRIC PANEL ── */
-  .metrics-live { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
-  .metric-item { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
-  .metric-val { font-size:24px; font-weight:800; color:var(--accent); font-family:var(--mono); }
-  .metric-lbl { font-size:9px; color:var(--text3); margin-top:4px; letter-spacing:1px; font-family:var(--mono); }
-
-  /* ── TABS ── */
-  .tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:24px; }
-  .tab { padding:10px 18px; font-size:13px; font-weight:600; cursor:pointer; color:var(--text2); border-bottom:2px solid transparent; transition:all .2s; }
-  .tab:hover { color:var(--text); }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
-
-  /* ── NOTIF PANEL ── */
-  .notif-panel {
-    position:absolute; top:calc(100% + 8px); right:0; width:320px;
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    box-shadow:var(--shadow); z-index:100; overflow:hidden;
-  }
-  .notif-header { padding:14px 16px; border-bottom:1px solid var(--border); font-size:13px; font-weight:700; }
-  .notif-item { padding:12px 16px; border-bottom:1px solid rgba(31,45,68,.5); cursor:pointer; transition:background .15s; }
-  .notif-item:hover { background:var(--surface2); }
-  .notif-item:last-child { border-bottom:none; }
-  .notif-name { font-size:12px; font-weight:600; }
-  .notif-msg { font-size:11px; color:var(--text2); margin-top:2px; }
-  .notif-time { font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:4px; }
-  .notif-unread { background:rgba(0,229,160,.04); }
-
-  /* ── LOGIN ── */
-  .login-page {
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:var(--bg); position:relative; overflow:hidden;
-  }
-  .login-bg {
-    position:absolute; inset:0;
-    background: radial-gradient(ellipse at 20% 80%, rgba(0,229,160,.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(0,153,255,.06) 0%, transparent 60%);
-  }
-  .login-grid {
-    position:absolute; inset:0; opacity:.03;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-  .login-card {
-    position:relative; background:var(--surface); border:1px solid var(--border);
-    border-radius:16px; padding:48px; width:420px; box-shadow:var(--shadow);
-  }
-  .login-logo { font-size:32px; font-weight:800; letter-spacing:4px; margin-bottom:4px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .login-sub { font-size:11px; color:var(--text3); font-family:var(--mono); margin-bottom:32px; }
-  .login-form { display:flex; flex-direction:column; gap:16px; }
-  .login-divider { border:none; border-top:1px solid var(--border); margin:8px 0; }
-  .login-incn { font-size:11px; color:var(--text3); text-align:center; font-family:var(--mono); }
-
-  /* ── CHART CARD ── */
-  .chart-card { background:var(--surface4); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
-  .chart-title { font-size:13px; font-weight:600; margin-bottom:16px; }
-  .chart-sub { font-size:10px; color:var(--text2); font-family:var(--mono); margin-top:4px; }
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .three-col { display:grid; grid-template-columns:2fr 1fr; gap:20px; }
-
-  /* ── SESSION DETAIL ── */
-  .session-row { display:flex; gap:14px; align-items:center; padding:14px 16px; border-radius:10px; background:var(--surface4); border:1px solid var(--border); cursor:pointer; transition:all .2s; }
-  .session-row:hover { border-color:var(--accent2); }
-  .session-date { font-size:11px; font-family:var(--mono); color:var(--text2); min-width:90px; }
-  .session-info { flex:1; }
-  .session-title { font-size:13px; font-weight:600; }
-  .session-meta { font-size:11px; color:var(--text2); font-family:var(--mono); }
-  .session-scores { display:flex; gap:16px; align-items:center; }
-  .score-item { text-align:right; }
-  .score-val { font-size:16px; font-weight:800; color:var(--accent); font-family:var(--mono); }
-  .score-lbl { font-size:9px; color:var(--text3); font-family:var(--mono); }
-
-  /* ── PROGRESS BAR ── */
-  .progress-wrap { background:var(--surface2); border-radius:4px; height:6px; overflow:hidden; }
-  .progress-fill { height:100%; border-radius:4px; transition:width .6s ease; }
-
-  /* ── DETAIL GRID ── */
-  .detail-grid { display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:start; }
-  .info-list { display:flex; flex-direction:column; gap:0; }
-  .info-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(31,45,68,.5); }
-  .info-row:last-child { border-bottom:none; }
-  .info-key { font-size:11px; color:var(--text2); font-family:var(--mono); }
-  .info-val { font-size:13px; font-weight:600; }
-
-  /* ── ALERT ── */
-  .alert { border-radius:10px; padding:14px 16px; font-size:13px; border:1px solid; display:flex; align-items:flex-start; gap:10px; }
-  .alert-warn { background:rgba(255,184,48,.06); border-color:rgba(255,184,48,.2); color:var(--warn); }
-  .alert-green { background:rgba(0,229,160,.06); border-color:rgba(0,229,160,.2); color:var(--accent); }
-
-  /* ── EMPTY STATE ── */
-  .empty { text-align:center; padding:60px 20px; color:var(--text3); }
-  .empty-icon { font-size:40px; margin-bottom:12px; }
-  .empty-text { font-size:14px; margin-bottom:8px; color:var(--text2); }
-  .empty-sub { font-size:12px; font-family:var(--mono); }
-
-  /* ── ANIMATE ── */
-  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-  .fade-up { animation:fadeUp .35s ease both; }
-
-  /* ── MODAL ── */
-  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:200; }
-  .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:32px; width:540px; max-height:90vh; overflow-y:auto; box-shadow:var(--shadow); }
-  .modal-title { font-size:18px; font-weight:700; margin-bottom:24px; }
-
-  /* ── RECOMEND CHIP ── */
-  .rec-up   { color:var(--accent);  border:1px solid rgba(0,229,160,.2); }
-  .rec-keep { color:var(--warn); border:1px solid rgba(255,184,48,.2); }
-  .rec-down { color:var(--accent3); border:1px solid rgba(255,107,107,.2); }
-`;
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
@@ -515,9 +192,6 @@ function Sidebar({ page, setPage, unread }: { page: Page, setPage: (p: Page) => 
 
             <nav className="nav">
                 <div className="nav-label">PRINCIPAL</div>
-                <div className={`nav-item ${page === "dashboard" ? "active" : ""}`} onClick={() => setPage("dashboard")}>
-                    <span className="nav-icon">⬡</span> Dashboard
-                </div>
                 <div className={`nav-item ${page === "patients" || page === "patient-detail" || page === "patient-new" || page === "patient-edit" ? "active" : ""}`} onClick={() => setPage("patients")}>
                     <span className="nav-icon">◈</span> Pacientes
                 </div>
@@ -525,7 +199,6 @@ function Sidebar({ page, setPage, unread }: { page: Page, setPage: (p: Page) => 
                 <div className="nav-label">MONITOREO</div>
                 <div className={`nav-item ${page === "session-live" ? "active" : ""}`} onClick={() => setPage("session-live")}>
                     <span className="nav-icon">◉</span> Sesión en Vivo
-                    {unread > 0 && <span className="nav-badge">{unread}</span>}
                 </div>
 
                 <div className="nav-label">ANÁLISIS</div>
@@ -753,7 +426,7 @@ function PatientsPage({ patients, setPage, setSelected }: {
                                 <th>PACIENTE</th>
                                 <th>DNI</th>
                                 <th>DIAGNÓSTICO</th>
-                                <th>MOCA</th>
+                                <th>ACIERTOS</th>
                                 <th>ETAPA</th>
                                 <th>ESTADO</th>
                                 <th>ÚLTIMA SESIÓN</th>
@@ -941,9 +614,9 @@ function PatientDetail({ patient, setPage }: { patient: Patient, setPage: (p: Pa
                 <div>
                     <div className="stats-grid" style={{ gridTemplateColumns: "repeat(4,1fr)", marginBottom: 20 }}>
                         <div className="card stat-accent">
-                            <div className="card-label">PUNTAJE MoCA</div>
-                            <div className="card-value">{patient.mocaScore}<span style={{ fontSize: 16, color: "var(--text2)" }}>/30</span></div>
-                            <div className="card-sub">Evaluación inicial</div>
+                            <div className="card-label">Aciertos</div>
+                            <div className="card-value">{patient.mocaScore - 15}<span style={{ fontSize: 16, color: "var(--text2)" }}>/24</span></div>
+                            <div className="card-sub">Cuestionario de preguntas</div>
                         </div>
                         <div className="card stat-blue">
                             <div className="card-label">SESIONES REALIZADAS</div>
@@ -954,7 +627,7 @@ function PatientDetail({ patient, setPage }: { patient: Patient, setPage: (p: Pa
                             <div className="card stat-warn">
                                 <div className="card-label">ÚLTIMO RENDIMIENTO</div>
                                 <div className="card-value" style={{ color: "var(--warn)" }}>{lastSession.memoriaEpisodica}%</div>
-                                <div className="card-sub">Memoria episódica</div>
+                                <div className="card-sub">Porcentaje de errores</div>
                             </div>
                             <div className="card stat-accent">
                                 <div className="card-label">RECOMENDACIÓN ML</div>
@@ -1100,23 +773,79 @@ function LiveSessionPage({ patients }: { patients: Patient[] }) {
             <div className="two-col" style={{ alignItems: "start" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                     <div className="live-wrapper">
+                        <img className="live-background" src="https://i.ibb.co/5WdXGQ8H/image.png" alt="image" />
                         <div className="live-badge"><div className="live-dot" />EN VIVO</div>
                         <div className="live-placeholder">
-                            <div style={{ fontSize: 32, marginBottom: 8 }}>◉</div>
-                            <div>Transmisión Agora RTC</div>
-                            <div style={{ fontSize: 11, marginTop: 4, color: "var(--text3)" }}>Conectando con el visor Meta Quest 3S…</div>
-                            <div style={{ fontFamily: "var(--mono)", fontSize: 20, marginTop: 12, color: "var(--accent)" }}>{mm}:{ss}</div>
                         </div>
                     </div>
 
                     <div className="card">
-                        <div className="card-label">MÉTRICAS EN TIEMPO REAL</div>
-                        <div className="metrics-live" style={{ marginTop: 12 }}>
-                            <div className="metric-item"><div className="metric-val" style={{ color: "var(--accent)" }}>{lastSession?.aciertos ?? "-"}</div><div className="metric-lbl">ACIERTOS</div></div>
-                            <div className="metric-item"><div className="metric-val" style={{ color: "var(--accent3)" }}>{lastSession?.errores ?? "-"}</div><div className="metric-lbl">ERRORES</div></div>
-                            <div className="metric-item"><div className="metric-val" style={{ color: "var(--accent2)" }}>{lastSession?.objetosIdentificados ?? "-"}</div><div className="metric-lbl">OBJETOS</div></div>
-                            <div className="metric-item"><div className="metric-val" style={{ color: "var(--warn)" }}>{lastSession?.eventosReconocidos ?? "-"}</div><div className="metric-lbl">EVENTOS</div></div>
-                            <div className="metric-item"><div className="metric-val" style={{ color: "var(--text)" }}>{lastSession?.tiempoReaccion ? `${lastSession.tiempoReaccion}s` : "-"}</div><div className="metric-lbl">T. REACCIÓN</div></div>
+                        <div className="card-label">MÉTRICAS DE LA SESIÓN ACTUAL</div>
+                        <div className="metrics-live">
+                            {/* ORS */}
+                            <div className="metric-item">
+                                <div className="metric-val" style={{ color: "var(--accent)" }}>
+                                    {lastSession?.aciertos ?? "-"}
+                                </div>
+                                <div className="metric-label">
+                                    <span className="metric-abbr">ORS</span>
+                                    <span className="metric-tooltip">
+                                        Proporción de objetos clave identificados correctamente por el paciente dentro del entorno VR.
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* ERS */}
+                            <div className="metric-item">
+                                <div className="metric-val" style={{ color: "var(--accent3)" }}>
+                                    {lastSession?.errores ?? "-"}
+                                </div>
+                                <div className="metric-label">
+                                    <span className="metric-abbr">ERS</span>
+                                    <span className="metric-tooltip">
+                                        Porcentaje de eventos narrativos de la escena VR que el paciente reconoció y respondió de forma correcta.
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* SCS */}
+                            <div className="metric-item">
+                                <div className="metric-val" style={{ color: "var(--accent2)" }}>
+                                    {lastSession?.objetosIdentificados ?? "-"}
+                                </div>
+                                <div className="metric-label">
+                                    <span className="metric-abbr">SCS</span>
+                                    <span className="metric-tooltip">
+                                        Puntaje de comprensión de la narrativa del nivel VR, basado en las respuestas a preguntas de comprensión al finalizar la escena.
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* ER */}
+                            <div className="metric-item">
+                                <div className="metric-val" style={{ color: "var(--warn)" }}>
+                                    {lastSession?.eventosReconocidos ?? "-"}
+                                </div>
+                                <div className="metric-label">
+                                    <span className="metric-abbr">ER</span>
+                                    <span className="metric-tooltip">
+                                        Proporción de respuestas incorrectas sobre el total de intentos del nivel. Un ER elevado puede indicar confusión o fatiga cognitiva.
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* RTA */}
+                            <div className="metric-item">
+                                <div className="metric-val" style={{ color: "var(--text)" }}>
+                                    {lastSession?.tiempoReaccion ? `${lastSession.tiempoReaccion}s` : "-"}
+                                </div>
+                                <div className="metric-label">
+                                    <span className="metric-abbr">RTA</span>
+                                    <span className="metric-tooltip">
+                                        Promedio en segundos del tiempo que tardó el paciente en responder a cada estímulo del nivel. Un valor más alto indica mayor latencia cognitiva.
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1133,10 +862,10 @@ function LiveSessionPage({ patients }: { patients: Patient[] }) {
                                 </div>
                             </div>
                             <div className="info-list">
-                                <div className="info-row"><span className="info-key">Nivel actual</span><span className="info-val">Nivel {lastSession?.level ?? 1}</span></div>
-                                <div className="info-row"><span className="info-key">Variación</span><span className="info-val">{lastSession?.variation ?? "-"}</span></div>
+                                <div className="info-row"><span className="info-key">Nivel actual</span><span className="info-val">Nivel {lastSession?.level ?? 1} - Mar de Pensamientos</span></div>
+                                <div className="info-row"><span className="info-key">Variación</span><span className="info-val">{lastSession?.variation ?? "-"} - El helado perdido</span></div>
                                 <div className="info-row"><span className="info-key">Dificultad</span><span className="info-val">{lastSession?.difficulty ?? "-"}</span></div>
-                                <div className="info-row"><span className="info-key">MoCA basal</span><span className="info-val">{activePatient.mocaScore}/30</span></div>
+                                <div className="info-row"><span className="info-key">Total de preguntas</span><span className="info-val">6/6</span></div>
                             </div>
                         </div>
                     )}
@@ -1158,30 +887,6 @@ function LiveSessionPage({ patients }: { patients: Patient[] }) {
                             ) : (
                                 <div style={{ color: "var(--text3)", fontSize: 12, fontFamily: "var(--mono)" }}>Esperando finalización del nivel…</div>
                             )}
-                        </div>
-                    </div>
-
-                    <div className="card">
-                        <div className="card-label">MÉTRICAS POR DOMINIO COGNITIVO</div>
-                        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 12 }}>
-                            <div>
-                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 6 }}>
-                                    <span style={{ color: "var(--text2)" }}>Memoria Episódica</span>
-                                    <span style={{ fontFamily: "var(--mono)", color: "var(--accent)" }}>{lastSession?.memoriaEpisodica ?? 0}%</span>
-                                </div>
-                                <div className="progress-wrap">
-                                    <div className="progress-fill" style={{ width: `${lastSession?.memoriaEpisodica ?? 0}%`, background: "var(--accent)" }} />
-                                </div>
-                            </div>
-                            <div>
-                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 6 }}>
-                                    <span style={{ color: "var(--text2)" }}>Atención Sostenida</span>
-                                    <span style={{ fontFamily: "var(--mono)", color: "var(--accent2)" }}>{lastSession?.atencionSostenida ?? 0}%</span>
-                                </div>
-                                <div className="progress-wrap">
-                                    <div className="progress-fill" style={{ width: `${lastSession?.atencionSostenida ?? 0}%`, background: "var(--accent2)" }} />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1381,7 +1086,7 @@ function AnalyticsPage({ patients }: { patients: Patient[] }) {
 
 export default function App() {
     const [authed, setAuthed] = useState(false);
-    const [page, setPage] = useState<Page>("dashboard");
+    const [page, setPage] = useState<Page>("patients");
     const [patients, setPatients] = useState<Patient[]>(MOCK_PATIENTS);
     const [selectedId, setSelectedId] = useState("");
     const [notifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
@@ -1408,7 +1113,6 @@ export default function App() {
     const pageMeta: Record<Page, { title: string, sub: string }> = {
         login: { title: "", sub: "" },
         forgot: { title: "", sub: "" },
-        dashboard: { title: "Dashboard", sub: "Vista general del sistema AREMEC" },
         patients: { title: "Gestión de Pacientes", sub: "Registro, consulta y edición de pacientes" },
         "patient-detail": { title: "Dashboard del Paciente", sub: "Métricas, historial y análisis cognitivo individual" },
         "patient-new": { title: "Registrar Nuevo Paciente", sub: "Complete los datos clínicos iniciales" },
@@ -1423,8 +1127,7 @@ export default function App() {
 
     if (!authed) return (
         <>
-            <style>{CSS}</style>
-            <LoginPage onLogin={() => { setAuthed(true); setPage("dashboard"); }} />
+            <LoginPage onLogin={() => { setAuthed(true); setPage("patients"); }} />
         </>
     );
 
@@ -1432,7 +1135,6 @@ export default function App() {
 
     return (
         <>
-            <style>{CSS}</style>
             <div className="app-shell">
                 <Sidebar page={page} setPage={setPage} unread={unread} />
                 <div className="main">
@@ -1452,7 +1154,6 @@ export default function App() {
                             Tu sesión expirará por inactividad en <strong style={{ fontFamily: "var(--mono)" }}>{inactiveLeft}s</strong>. Mueve el mouse para continuar.
                         </div>
                     )}
-                    {page === "dashboard" && <DashboardPage patients={patients} notifications={notifications} setPage={setPage} setSelected={setSelectedId} />}
                     {page === "patients" && <PatientsPage patients={patients} setPage={setPage} setSelected={setSelectedId} setPatients={setPatients} />}
                     {page === "patient-new" && <PatientForm patients={patients} selectedId={selectedId} mode="new" setPage={setPage} setPatients={setPatients} setSelected={setSelectedId} />}
                     {page === "patient-edit" && <PatientForm patients={patients} selectedId={selectedId} mode="edit" setPage={setPage} setPatients={setPatients} setSelected={setSelectedId} />}
