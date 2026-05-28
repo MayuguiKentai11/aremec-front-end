@@ -210,7 +210,7 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
     );
 }
 
-function Sidebar({ page, setPage, unread }: { page: Page, setPage: (p: Page) => void, unread: number }) {
+function Sidebar({ page, setPage, unread: _unread }: { page: Page, setPage: (p: Page) => void, unread: number }) {
     return (
         <aside className="sidebar">
             <div className="sidebar-logo">
@@ -297,7 +297,7 @@ function Topbar({ title, sub, actions, notifications, onLogout }: {
 }
 
 // ── DASHBOARD PAGE ────────────────────────────────────────────────────────────
-function DashboardPage({ patients, notifications, setPage, setSelected }: {
+export function DashboardPage({ patients, notifications, setPage, setSelected }: {
     patients: Patient[], notifications: Notification[],
     setPage: (p: Page) => void, setSelected: (id: string) => void
 }) {
