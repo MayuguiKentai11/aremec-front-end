@@ -842,6 +842,39 @@ tbody tr:last-child td {
   opacity: 1;
 }
 
+/* ── ML FIELD DISPLAY ── */
+.ml-field-pending {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text3);
+  font-style: italic;
+}
+
+.ml-field-error {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--accent3);
+}
+
+/* ── METRIC CARD EXTRAS ── */
+.metric-domain {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+.metric-sps-class {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  text-align: left;
+}
+
+.recommendation-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+}
+
 /* ── TABS ── */
 .tabs {
   display: flex;

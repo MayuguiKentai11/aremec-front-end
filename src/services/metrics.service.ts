@@ -56,6 +56,6 @@ export async function getSessionMetrics(
   )
   return {
     sessionId: raw.session_id,
-    levels: raw.levels.map(toLevelMetrics),
+    levels: (raw.levels ?? []).map(toLevelMetrics),
   }
 }

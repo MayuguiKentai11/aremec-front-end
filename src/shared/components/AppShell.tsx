@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAppStore } from '../../store/app.store'
 import { ActiveSessionBanner } from '../../features/sessions/components/ActiveSessionBanner'
+import { SessionCompletionToast } from '../../features/sessions/components/SessionCompletionToast'
 import { LogoutButton } from '../../features/auth/components/LogoutButton'
 
 export default function AppShell() {
@@ -39,6 +40,7 @@ export default function AppShell() {
       </aside>
       <div className="main">
         <ActiveSessionBanner />
+        <SessionCompletionToast />
         <Outlet />
       </div>
     </div>

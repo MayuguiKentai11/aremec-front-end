@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppStore } from '../../../store/app.store'
 
-const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL as string
+const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL as string | undefined
 const WS_MAX_RETRIES = 3
 const WS_BASE_DELAY_MS = 1000
 
@@ -37,31 +37,44 @@ export function useSessionWebSocket(sessionId: string): void {
     }
 
     function startPolling() {
+      if (destroyed) return
       stopPolling()
       setActiveSession({ wsStatus: 'polling' })
       pollInterval = setInterval(() => {
+        if (destroyed) return
         queryClient.invalidateQueries({
           queryKey: ['session', sessionId, 'metrics'],
         })
       }, 5000)
       const { notifications } = useAppStore.getState()
-      setNotifications({
-        items: [
-          ...notifications.items,
-          {
-            id: crypto.randomUUID(),
-            type: 'connectivity_failed',
-            message:
-              'No se pudo restablecer la conexión en tiempo real. Los datos se actualizarán cada 5 segundos.',
-            read: false,
-          },
-        ],
-      })
+      const alreadyNotified = notifications.items.some(
+        (n) => n.type === 'connectivity_failed'
+      )
+      if (!alreadyNotified) {
+        setNotifications({
+          items: [
+            ...notifications.items,
+            {
+              id: crypto.randomUUID(),
+              type: 'connectivity_failed',
+              message:
+                'No se pudo restablecer la conexión en tiempo real. Los datos se actualizarán cada 5 segundos.',
+              read: false,
+            },
+          ],
+        })
+      }
     }
 
     function connect() {
       if (destroyed) return
-      ws = new WebSocket(`${WS_BASE_URL}/sessions/${sessionId}/stream`)
+      if (!WS_BASE_URL) {
+        startPolling()
+        return
+      }
+      ws = new WebSocket(
+        `${WS_BASE_URL}/sessions/${encodeURIComponent(sessionId)}/stream`
+      )
 
       ws.onopen = () => {
         if (destroyed) return
@@ -74,6 +87,7 @@ export function useSessionWebSocket(sessionId: string): void {
         try {
           const data = JSON.parse(event.data as string) as WsRawEvent
           if (data.type === 'level_completed') {
+            if (typeof data.level !== 'number' || !isFinite(data.level)) return
             queryClient.invalidateQueries({
               queryKey: ['session', sessionId, 'metrics'],
             })

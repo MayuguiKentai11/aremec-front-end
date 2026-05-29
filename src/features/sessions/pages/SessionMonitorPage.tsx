@@ -2,8 +2,11 @@ import { useParams, Navigate } from 'react-router-dom'
 import { useAppStore } from '../../../store/app.store'
 import { SessionCloseButton } from '../components/SessionCloseButton'
 import { WsStatusIndicator } from '../components/WsStatusIndicator'
-import { SessionCompletionToast } from '../components/SessionCompletionToast'
+import { MetricsPanel } from '../components/MetricsPanel'
+import { CloudflareStreamPlayer } from '../components/CloudflareStreamPlayer'
 import { useSessionWebSocket } from '../hooks/useSessionWebSocket'
+
+const CF_STREAM_ID = import.meta.env.VITE_CF_STREAM_ID as string | undefined
 
 export default function SessionMonitorPage() {
   const { id: patientId } = useParams<{ id: string }>()
@@ -16,21 +19,16 @@ export default function SessionMonitorPage() {
 
   return (
     <div className="page">
-      <SessionCompletionToast />
       <WsStatusIndicator />
       <div className="section-header">
         <h1 className="page-title">Monitor de sesión</h1>
-        <SessionCloseButton sessionId={sessionId} patientId={patientId!} />
+        <SessionCloseButton sessionId={sessionId} patientId={patientId ?? ''} />
       </div>
       <div className="card" style={{ marginBottom: 24 }}>
-        <p style={{ color: 'var(--text2)', fontSize: 13 }}>
-          Panel de métricas en tiempo real — disponible en Story 3.3
-        </p>
+        <MetricsPanel sessionId={sessionId} />
       </div>
       <div className="card">
-        <p style={{ color: 'var(--text2)', fontSize: 13 }}>
-          Stream VR en vivo — disponible en Story 3.4
-        </p>
+        <CloudflareStreamPlayer streamId={CF_STREAM_ID ?? ''} />
       </div>
     </div>
   )

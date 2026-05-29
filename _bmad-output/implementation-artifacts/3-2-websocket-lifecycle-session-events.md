@@ -4,7 +4,7 @@ baseline_commit: 2f9e267469983d93366d20a4224aff8f3d7b9f4f
 
 # Story 3.2: WebSocket Lifecycle & Session Events
 
-Status: review
+Status: done
 
 ## Story
 
@@ -80,6 +80,23 @@ So that I receive real-time updates and am alerted when the session completes.
   - [x] Add `.session-completion-toast` section
 
 - [x] **Verify `npm run build` passes (0 TypeScript errors)**
+
+### Review Findings
+
+- [x] [Review][Patch] AC3: Add `<SessionCompletionToast />` to `AppShell.tsx` so toast persists across navigation until dismissed [src/shared/components/AppShell.tsx]
+- [x] [Review][Patch] `setInterval` callback in `startPolling` missing `destroyed` guard — fires after unmount [src/features/sessions/hooks/useSessionWebSocket.ts:43]
+- [x] [Review][Patch] `error` may be `null` when passed to `ErrorMessage` in `!patient` guard — provide fallback error [src/features/patients/pages/PatientProfilePage.tsx:32]
+- [x] [Review][Patch] `VITE_WS_BASE_URL` not validated — becomes `"undefined"` string if env var unset [src/features/sessions/hooks/useSessionWebSocket.ts:5]
+- [x] [Review][Patch] Duplicate `connectivity_failed` notifications on every `startPolling()` call — no deduplication guard [src/features/sessions/hooks/useSessionWebSocket.ts:startPolling]
+- [x] [Review][Patch] `sessionId` not URL-encoded in WebSocket URL — `metrics.service.ts` encodes correctly, hook does not [src/features/sessions/hooks/useSessionWebSocket.ts:62]
+- [x] [Review][Patch] `patientId!` non-null assertion — use `patientId ?? ''` instead [src/features/sessions/pages/SessionMonitorPage.tsx:28]
+- [x] [Review][Patch] `data.level` not validated — `NaN`/`undefined` from server sets `currentLevel` to invalid value [src/features/sessions/hooks/useSessionWebSocket.ts:onmessage]
+- [x] [Review][Patch] `raw.levels` not null-guarded — `TypeError` crash if server omits field on empty session [src/services/metrics.service.ts:toLevelMetrics]
+- [x] [Review][Defer] Infinite reconnect / no total retry cap across reconnect cycles — production hardening, out of scope [src/features/sessions/hooks/useSessionWebSocket.ts] — deferred, pre-existing
+- [x] [Review][Defer] No active-session guard in `SessionOpenButton` before creating new session — out of scope; tracked from Story 3.1 deferred items [src/features/sessions/components/SessionOpenButton.tsx] — deferred, pre-existing
+- [x] [Review][Defer] `recommendation` field unsafe cast without runtime validation — by spec design (TypeScript-only contract) [src/services/metrics.service.ts] — deferred, pre-existing
+- [x] [Review][Defer] `Session.status` typed as `string` — pre-existing from Story 3.1 [src/features/sessions/session.types.ts] — deferred, pre-existing
+- [x] [Review][Defer] `Session.startedAt` typed as `Date` but API returns ISO string — needs API layer investigation [src/features/sessions/session.types.ts] — deferred, pre-existing
 
 ## Dev Notes
 

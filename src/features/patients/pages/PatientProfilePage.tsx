@@ -34,7 +34,7 @@ export default function PatientProfilePage() {
 
   if (!id) return <ErrorMessage error={new Error('Ruta inválida: falta el ID del paciente')} />
   if (isPending) return <LoadingSpinner />
-  if (!patient) return <ErrorMessage error={error} />
+  if (!patient) return <ErrorMessage error={error ?? new Error('Paciente no encontrado')} />
 
   return (
     <div className="page">

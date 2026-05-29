@@ -52,3 +52,22 @@
 - `setInterval` clock drift over long sessions — visual only; timer recalculates from `Date.now()` wall clock on each tick [src/features/sessions/components/ActiveSessionBanner.tsx]
 - `createSession` called while active session exists in store — API expected to enforce uniqueness; orphaned session risk [src/features/sessions/components/SessionOpenButton.tsx]
 - `completeSession` sends `{}` as PATCH body — intentional per api.ts contract; server must accept empty body [src/services/sessions.service.ts]
+
+## Deferred from: code review of 3-3-real-time-metrics-panel (2026-05-29)
+
+- `patientId ?? ''` passes empty string to SessionCloseButton — spec-conformant but fragile; add early return guard when patientId is undefined [src/features/sessions/pages/SessionMonitorPage.tsx:24]
+- `MLFieldDisplay` fallthrough `else` branch lacks explicit `'resolved'` guard — TypeScript-safe for current MLField union, but risks rendering `field.value` as undefined if API sends unexpected status [src/features/sessions/components/MLFieldDisplay.tsx:18]
+- `RecommendationDisplay` maps API values to label/badge without fallback — unknown recommendation value renders as empty badge with `className="... undefined"` [src/features/sessions/components/RecommendationDisplay.tsx:28-35]
+- `LevelMetricCard value.toFixed(2)` call site has no NaN/Infinity/undefined guard — malformed API metric field would throw or render "NaN" on screen [src/features/sessions/components/LevelMetricCard.tsx:10]
+- `useSessionMetrics` hook has no `staleTime` or `refetchOnWindowFocus: false` — every window focus fires an extra metrics request alongside WebSocket-driven invalidations [src/features/sessions/hooks/useSession.ts:4-9]
+- `WS_BASE_URL` undefined silently falls to polling — configuration error is indistinguishable from connectivity failure in user-facing notifications [src/features/sessions/hooks/useSessionWebSocket.ts:74]
+- `encodeURIComponent` applied to `sessionId` in WS URL but not to `patientId` in navigation paths — inconsistent encoding pattern [src/features/sessions/hooks/useSessionWebSocket.ts:80]
+- `DomainTag` DOMAIN_CLASS map and `MetricsPanel` METRIC_DOMAINS map share Spanish domain strings as keys with no shared constant — silent fallback to badge-gray on rename/i18n drift [src/features/sessions/components/DomainTag.tsx:1-5, src/features/sessions/components/MetricsPanel.tsx:8-14]
+
+## Deferred from: code review of 3-2-websocket-lifecycle-session-events (2026-05-29)
+
+- Infinite reconnect / no total retry cap across reconnect cycles — production hardening; would require new circuit-breaker logic [src/features/sessions/hooks/useSessionWebSocket.ts]
+- No active-session guard in `SessionOpenButton` before creating new session — can overwrite store if second session started while first is active; tracked from Story 3.1 deferred items [src/features/sessions/components/SessionOpenButton.tsx]
+- `recommendation` field unsafe cast without runtime validation — TypeScript-only contract per spec design; add Zod validation in a future hardening pass [src/services/metrics.service.ts]
+- `Session.status` typed as unbounded `string` — no union type enforcing valid values; pre-existing from Story 3.1 [src/features/sessions/session.types.ts]
+- `Session.startedAt` typed as `Date` but API likely returns ISO string — needs investigation of `api.get` deserializer; pre-existing architectural pattern [src/features/sessions/session.types.ts]
