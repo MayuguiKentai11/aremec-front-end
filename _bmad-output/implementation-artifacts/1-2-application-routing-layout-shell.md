@@ -4,7 +4,7 @@ baseline_commit: 62c71344be0f0746bbf28a9305bc2983b5dd9e37
 
 # Story 1.2: Application Routing & Layout Shell
 
-Status: review
+Status: done
 
 ## Story
 
@@ -71,6 +71,13 @@ so that I can access my workspace securely and find navigation items in a predic
   - [x] Export `router` as default
 
 - [x] Verify build passes with `npm run build` (no TypeScript errors)
+
+### Review Findings
+
+- [x] [Review][Patch] Concurrent `requireAuth` invocations race on shared Zustand state [`src/router/index.tsx:7-21`]
+- [x] [Review][Patch] Initials crash on names with consecutive/leading/trailing spaces [`src/shared/components/AppShell.tsx:8`]
+- [x] [Review][Defer] `/login` route not guarded for authenticated users [`src/router/index.tsx:22-25`] — deferred, pre-existing; Story 1.3 rewrites LoginPage and will add redirect
+- [x] [Review][Defer] `setAuth(Partial<AuthSlice>)` allows incoherent auth state [`src/store/app.store.ts:24,36`] — deferred, pre-existing from Story 1.1 design
 
 ## Dev Notes
 

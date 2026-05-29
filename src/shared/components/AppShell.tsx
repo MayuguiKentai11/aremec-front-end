@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAppStore } from '../../store/app.store'
 import { ActiveSessionBanner } from '../../features/sessions/components/ActiveSessionBanner'
+import { LogoutButton } from '../../features/auth/components/LogoutButton'
 
 export default function AppShell() {
   const neurologist = useAppStore((s) => s.auth.neurologist)
   const initials = neurologist?.name
-    ? neurologist.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+    ? neurologist.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase()
     : '?'
 
   return (
@@ -30,6 +31,9 @@ export default function AppShell() {
           <div>
             <div className="user-name">{neurologist?.name ?? 'Neurólogo'}</div>
             <div className="user-role">Neurólogo</div>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            <LogoutButton />
           </div>
         </div>
       </aside>
