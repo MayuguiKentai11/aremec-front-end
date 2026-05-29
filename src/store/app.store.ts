@@ -10,7 +10,9 @@ type AuthSlice = {
 
 type ActiveSessionSlice = {
   sessionId: string | null
+  patientId: string | null
   startedAt: Date | null
+  currentLevel: number | null
   wsStatus: 'connected' | 'reconnecting' | 'polling' | 'disconnected'
 }
 
@@ -31,7 +33,13 @@ type AppStore = {
 
 export const useAppStore = create<AppStore>((set) => ({
   auth: { neurologist: null, status: 'loading' },
-  activeSession: { sessionId: null, startedAt: null, wsStatus: 'disconnected' },
+  activeSession: {
+    sessionId: null,
+    patientId: null,
+    startedAt: null,
+    currentLevel: null,
+    wsStatus: 'disconnected',
+  },
   notifications: { pendingSessionComplete: false, items: [] },
   setAuth: (patch) => set((s) => ({ auth: { ...s.auth, ...patch } })),
   setActiveSession: (patch) =>
@@ -42,7 +50,9 @@ export const useAppStore = create<AppStore>((set) => ({
     set(() => ({
       activeSession: {
         sessionId: null,
+        patientId: null,
         startedAt: null,
+        currentLevel: null,
         wsStatus: 'disconnected',
       },
     })),

@@ -5,7 +5,12 @@ import { RouterProvider } from 'react-router-dom'
 import router from './router/index'
 import './index.css'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 10_000 },
+    mutations: { retry: false },
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

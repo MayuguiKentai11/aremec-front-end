@@ -4,7 +4,7 @@ baseline_commit: 2a5593c
 
 # Story 2.1: Patient Registration Form
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -24,43 +24,43 @@ so that I can start managing their VR therapy sessions in the portal.
 
 ## Tasks / Subtasks
 
-- [ ] Create `src/features/patients/patient.types.ts` (AC: #1, #2)
-  - [ ] Export `Diagnosis = 'EA' | 'MCI'` union
-  - [ ] Export `Patient` type (id, name, age, gender, diagnosis, baselineRavlt, baselineSart) — all camelCase
+- [x] Create `src/features/patients/patient.types.ts` (AC: #1, #2)
+  - [x] Export `Diagnosis = 'EA' | 'MCI'` union
+  - [x] Export `Patient` type (id, name, age, gender, diagnosis, baselineRavlt, baselineSart) — all camelCase
 
-- [ ] Create `src/features/patients/patient.schema.ts` (AC: #1, #3)
-  - [ ] Define `PatientRegistrationSchema` Zod object with all 6 fields
-  - [ ] Export `PatientRegistrationFormData = z.infer<typeof PatientRegistrationSchema>`
+- [x] Create `src/features/patients/patient.schema.ts` (AC: #1, #3)
+  - [x] Define `PatientRegistrationSchema` Zod object with all 6 fields
+  - [x] Export `PatientRegistrationFormData = z.infer<typeof PatientRegistrationSchema>` (split into `PatientRegistrationFormInput` / `PatientRegistrationFormData` to support `z.coerce` input vs output types under zod v4)
 
-- [ ] Create `src/services/patients.service.ts` (AC: #2, #4)
-  - [ ] Internal `PatientRaw` type (snake_case fields from API)
-  - [ ] Internal `toCamel(raw)` transformer returning `Patient`
-  - [ ] Export `createPatient(data: PatientCreateInput): Promise<Patient>` — transforms camelCase input to snake_case for `api.post`, transforms response back to camelCase
+- [x] Create `src/services/patients.service.ts` (AC: #2, #4)
+  - [x] Internal `PatientRaw` type (snake_case fields from API)
+  - [x] Internal `toCamel(raw)` transformer returning `Patient`
+  - [x] Export `createPatient(data: PatientCreateInput): Promise<Patient>` — transforms camelCase input to snake_case for `api.post`, transforms response back to camelCase
 
-- [ ] Create `src/features/patients/hooks/useCreatePatient.ts` (AC: #2, #4)
-  - [ ] `useMutation({ mutationFn: createPatient })` from `@tanstack/react-query`
-  - [ ] `onSuccess`: call `queryClient.invalidateQueries({ queryKey: ['patients'] })`
-  - [ ] Export `useCreatePatient` hook
+- [x] Create `src/features/patients/hooks/useCreatePatient.ts` (AC: #2, #4)
+  - [x] `useMutation({ mutationFn: createPatient })` from `@tanstack/react-query`
+  - [x] `onSuccess`: call `queryClient.invalidateQueries({ queryKey: ['patients'] })`
+  - [x] Export `useCreatePatient` hook
 
-- [ ] Create `src/features/patients/components/PatientRegistrationForm.tsx` (AC: #1, #2, #3, #4)
-  - [ ] `useForm<PatientRegistrationFormData>({ resolver: zodResolver(PatientRegistrationSchema) })`
-  - [ ] `useCreatePatient()` for mutation; `useNavigate()` for post-success navigation
-  - [ ] Render mutation `error` as `<ErrorMessage error={error} />` above form-grid when truthy
-  - [ ] Field layout using `.form-grid`: name (span2), age + gender (row), diagnosis (half) + baselineSart (half), baselineRavlt (half) — see Blueprints
-  - [ ] Each field: `<div className="input-group">` → `<label className="input-label">` → `<input className="input" {...register(...)}>` → inline error span
-  - [ ] Diagnosis and gender as `<select className="input">` — NOT `<input>`
-  - [ ] Submit button: `<button className="btn btn-primary" disabled={isPending}>`
-  - [ ] Cancel/back button: `<button type="button" className="btn btn-ghost" onClick={() => navigate('/patients')}>`
-  - [ ] `onSubmit`: `mutate(data, { onSuccess: () => navigate('/patients') })`
+- [x] Create `src/features/patients/components/PatientRegistrationForm.tsx` (AC: #1, #2, #3, #4)
+  - [x] `useForm<PatientRegistrationFormInput, unknown, PatientRegistrationFormData>({ resolver: zodResolver(PatientRegistrationSchema) })`
+  - [x] `useCreatePatient()` for mutation; `useNavigate()` for post-success navigation
+  - [x] Render mutation `error` as `<ErrorMessage error={error} />` above form-grid when truthy
+  - [x] Field layout using `.form-grid`: name (span2), age + gender (row), diagnosis (half) + baselineSart (half), baselineRavlt (half) — see Blueprints
+  - [x] Each field: `<div className="input-group">` → `<label className="input-label">` → `<input className="input" {...register(...)}>` → inline error span
+  - [x] Diagnosis and gender as `<select className="input">` — NOT `<input>`
+  - [x] Submit button: `<button className="btn btn-primary" disabled={isPending}>`
+  - [x] Cancel/back button: `<button type="button" className="btn btn-ghost" onClick={() => navigate('/patients')}>`
+  - [x] `onSubmit`: `mutate(data, { onSuccess: () => navigate('/patients') })`
 
-- [ ] Create `src/features/patients/pages/PatientRegistrationPage.tsx` (AC: #1)
-  - [ ] Thin page wrapper: `.page` div + `.page-title` heading + `.card` wrapping `<PatientRegistrationForm />`
+- [x] Create `src/features/patients/pages/PatientRegistrationPage.tsx` (AC: #1)
+  - [x] Thin page wrapper: `.page` div + `.page-title` heading + `.card` wrapping `<PatientRegistrationForm />`
 
-- [ ] Modify `src/router/index.tsx` (AC: #1)
-  - [ ] Replace stub `patients/new` route element with `<PatientRegistrationPage />`
-  - [ ] Add import for `PatientRegistrationPage` at top of file
+- [x] Modify `src/router/index.tsx` (AC: #1)
+  - [x] Replace stub `patients/new` route element with `<PatientRegistrationPage />`
+  - [x] Add import for `PatientRegistrationPage` at top of file
 
-- [ ] Verify `npm run build` passes (0 TypeScript errors)
+- [x] Verify `npm run build` passes (0 TypeScript errors)
 
 ## Dev Notes
 
@@ -393,10 +393,54 @@ The `['patients']` query key established in `useCreatePatient.ts` (`invalidateQu
 
 ### Agent Model Used
 
-claude-sonnet-4-6
+claude-opus-4-7
 
 ### Debug Log References
 
+- Initial `npm run build` failed with TS2322/TS2345 in `PatientRegistrationForm.tsx`: RHF resolver type mismatch caused by `z.coerce.number()` producing `unknown` input → `number` output under zod v4. Resolved by splitting schema into `PatientRegistrationFormInput` (`z.input`) and `PatientRegistrationFormData` (`z.output`) and typing `useForm<Input, unknown, Output>`. Second build succeeded (0 errors).
+- `npm run lint` reports 2 pre-existing errors in `src/NeurologistDashboard/NeurologistDashboard.tsx` (out of scope — not touched by this story). All new files are lint-clean.
+
 ### Completion Notes List
 
+- Followed blueprints with two justified deviations:
+  1. **zod v4 error syntax**: project ships zod 4.4.3, so `required_error` / `invalid_type_error` (v3) were replaced with the v4 `{ message: '...' }` form.
+  2. **RHF generics for `z.coerce`**: typed `useForm<Input, unknown, Output>` and exported `PatientRegistrationFormInput` alongside `PatientRegistrationFormData` to satisfy `verbatimModuleSyntax` + coerced number inputs.
+- `useNavigate` stays inside the form component; `useCreatePatient` hook handles only mutation + cache invalidation (per Dev Notes).
+- Snake_case ↔ camelCase translation is confined to `patients.service.ts` (`toCamel` + payload mapping in `createPatient`).
+- `defaultValue=""` on the two `<select>` elements ensures the "Seleccionar..." placeholder is shown initially and RHF receives the empty value (triggers Zod validation when left untouched).
+- `useMutation` uses `isPending` (v5), not `isLoading`.
+- `invalidateQueries` uses object form `{ queryKey: ['patients'] }` (v5 syntax).
+- File List updated with all 7 new files + 1 modified.
+- No tests authored: project has no test framework configured (no Vitest/Jest/Testing Library in `package.json`); previous Epic 1 stories also shipped without unit tests. Verification is via `npm run build` (TypeScript) as stipulated by the final task in this story. Manual browser verification of ACs 1–4 is the recommended next step for the reviewer.
+
 ### File List
+
+**New files:**
+- `src/features/patients/patient.types.ts`
+- `src/features/patients/patient.schema.ts`
+- `src/features/patients/hooks/useCreatePatient.ts`
+- `src/features/patients/components/PatientRegistrationForm.tsx`
+- `src/features/patients/pages/PatientRegistrationPage.tsx`
+- `src/services/patients.service.ts`
+
+**Modified files:**
+- `src/router/index.tsx` (import + `/patients/new` element)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (status: ready-for-dev → in-progress → review)
+- `_bmad-output/implementation-artifacts/2-1-patient-registration-form.md` (Status, Tasks, Dev Agent Record, File List, Change Log)
+
+## Review Findings
+
+- [x] [Review][Decision] Age minimum 0 — raised to `.min(50, 'Edad mínima: 50 años')` per clinical decision. Fixed in `patient.schema.ts`.
+- [x] [Review][Decision] No bounds on baseline scores — RAVLT: 0–75, SART: 0–100 with `.finite()` applied. Fixed in `patient.schema.ts`.
+- [x] [Review][Patch] `baselineRavlt`/`baselineSart` accept `Infinity` — added `.finite()` to both fields. Fixed in `patient.schema.ts`.
+- [x] [Review][Defer] `defaultValue=""` on selects without `useForm({ defaultValues })` — current behavior correct (RHF reads DOM ref on submit); becomes defect if `reset()` ever added [src/features/patients/components/PatientRegistrationForm.tsx] — deferred, pre-existing
+- [x] [Review][Defer] `toCamel(undefined)` on non-JSON API response — error propagates to TanStack Query `mutation.error`, user sees `<ErrorMessage>`; message text may be confusing (TypeError) [src/services/patients.service.ts] — deferred, pre-existing
+- [x] [Review][Defer] Cancel during in-flight POST — no AbortController; orphaned mutation completes async, double `navigate('/patients')` is a no-op in React Router v6 [src/features/patients/components/PatientRegistrationForm.tsx] — deferred, pre-existing
+- [x] [Review][Defer] Navigate fires before `invalidateQueries` settles — stale data flash on patients list; observable only once Story 2.2 is implemented [src/features/patients/components/PatientRegistrationForm.tsx] — deferred, pre-existing
+- [x] [Review][Defer] `PatientRaw` no runtime shape validation — TypeScript-only API contract, pre-existing architectural pattern [src/services/patients.service.ts] — deferred, pre-existing
+
+## Change Log
+
+| Date | Change | Author |
+|---|---|---|
+| 2026-05-28 | Implemented Story 2.1 (Patient Registration Form): types, Zod schema, service, mutation hook, form component, page, and `/patients/new` route wiring. Build green. Status → review. | claude-opus-4-7 |

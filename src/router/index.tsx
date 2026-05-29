@@ -3,6 +3,10 @@ import { useAppStore } from '../store/app.store'
 import { getMe } from '../services/auth.service'
 import AppShell from '../shared/components/AppShell'
 import LoginPage from '../features/auth/pages/LoginPage'
+import PatientRegistrationPage from '../features/patients/pages/PatientRegistrationPage'
+import PatientListPage from '../features/patients/pages/PatientListPage'
+import PatientProfilePage from '../features/patients/pages/PatientProfilePage'
+import SessionMonitorPage from '../features/sessions/pages/SessionMonitorPage'
 
 let authCheckInFlight: Promise<Response | null> | null = null
 
@@ -54,10 +58,10 @@ const router = createBrowserRouter([
     loader: requireAuth,
     children: [
       { index: true, element: <Navigate to="/patients" replace /> },
-      { path: 'patients', element: <div className="page"><p>Pacientes — próximamente</p></div> },
-      { path: 'patients/new', element: <div className="page"><p>Nuevo paciente — próximamente</p></div> },
-      { path: 'patients/:id', element: <div className="page"><p>Perfil del paciente — próximamente</p></div> },
-      { path: 'patients/:id/session', element: <div className="page"><p>Monitor de sesión — próximamente</p></div> },
+      { path: 'patients', element: <PatientListPage /> },
+      { path: 'patients/new', element: <PatientRegistrationPage /> },
+      { path: 'patients/:id', element: <PatientProfilePage /> },
+      { path: 'patients/:id/session', element: <SessionMonitorPage /> },
       { path: 'sessions/:id', element: <div className="page"><p>Detalle de sesión — próximamente</p></div> },
     ],
   },
