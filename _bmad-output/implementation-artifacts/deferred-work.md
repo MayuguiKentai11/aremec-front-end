@@ -71,3 +71,40 @@
 - `recommendation` field unsafe cast without runtime validation — TypeScript-only contract per spec design; add Zod validation in a future hardening pass [src/services/metrics.service.ts]
 - `Session.status` typed as unbounded `string` — no union type enforcing valid values; pre-existing from Story 3.1 [src/features/sessions/session.types.ts]
 - `Session.startedAt` typed as `Date` but API likely returns ISO string — needs investigation of `api.get` deserializer; pre-existing architectural pattern [src/features/sessions/session.types.ts]
+
+## Deferred from: code review of 3-4-live-vr-stream-embed (2026-05-29)
+
+- `pendingSessionComplete` not reset by `resetActiveSession` — after a normal session close via `SessionCloseButton`, `pendingSessionComplete` remains `true` in the store; `SessionCompletionToast` in `AppShell` re-appears on the patient detail page. Fix: `resetActiveSession` in `app.store.ts` should also clear `notifications.pendingSessionComplete` [src/shared/components/AppShell.tsx, src/store/app.store.ts]
+- MetricsPanel TanStack Query not cancelled on session close — `useSessionMetrics` query may still be in-flight when `resetActiveSession` runs and `SessionMonitorPage` unmounts; `enabled: !!sessionId` prevents new fetches but does not cancel the in-flight request. Pre-existing architectural pattern [src/features/sessions/components/MetricsPanel.tsx, src/features/sessions/hooks/useSession.ts]
+
+## Deferred from: code review of 4-1-patient-dashboard-sps-trend (2026-05-30)
+
+- Date timezone risk — bare `YYYY-MM-DD` strings display one day prior at UTC-5 (Peru); mitigated by spec guaranteeing full datetime strings; revisit if API contract changes [src/features/analytics/components/PatientDashboard.tsx]
+- Invalid sessionDate crashes render — `new Date(invalid)` → `Intl.DateTimeFormat.format()` throws `RangeError`; backend contract specifies valid ISO 8601 [src/features/analytics/components/PatientDashboard.tsx]
+- `sps` null/NaN from API — `.toFixed(1)` throws or renders "NaN"; type declares `number` as non-nullable; backend contract issue [src/features/analytics/components/PatientDashboard.tsx]
+- Empty/whitespace `patientId` → query disabled → spinner forever — currently protected by `PatientProfilePage` null guard; latent risk if component reused [src/features/analytics/hooks/usePatientDashboard.ts]
+- `sps` outside [0,100] — chart clips silently at YAxis bounds while table shows raw value; backend data quality issue [src/features/analytics/components/PatientDashboard.tsx]
+- Chart X-axis label collisions on dense session lists — Story 4.2 session filter addresses this [src/features/analytics/components/PatientDashboard.tsx]
+- `api.get` returns undefined for non-JSON response — pre-existing service-layer issue affecting all API calls [src/services/patients.service.ts]
+- Inline style objects recreated every render — performance optimization; future work [src/features/analytics/components/PatientDashboard.tsx]
+- No `staleTime`/`gcTime` on dashboard query — default refetch-on-focus may be desirable for clinical freshness [src/features/analytics/hooks/usePatientDashboard.ts]
+
+## Deferred from: code review of 4-2-cognitive-trend-chart-session-filter (2026-05-30)
+
+- UTC date off-by-one on date-only ISO strings in TrendChart/SessionFilter — aligns with 4-1 defer; mitigated by spec guaranteeing full datetime strings [src/features/analytics/components/TrendChart.tsx:28, SessionFilter.tsx:30]
+- Invalid `sessionDate` crashes TrendChart/SessionFilter render — `new Date(invalid)` → `Intl.DateTimeFormat.format()` throws RangeError; same class as 4-1 defer; backend contract specifies valid ISO 8601 [src/features/analytics/components/TrendChart.tsx:28-29, SessionFilter.tsx:30]
+- `data.slope.toFixed(2)` crashes if slope is null/NaN/non-finite — same class as 4-1 `sps` null/NaN defer; raw type declares `number` as non-nullable [src/features/analytics/components/TrendChart.tsx:39]
+- `TrendChart` (`/trend`) and `PatientDashboard` (`/dashboard`) can show contradictory trend directions — two intentionally separate API endpoints per spec architecture; no shared source of truth [src/features/analytics/components/TrendChart.tsx, PatientDashboard.tsx]
+- `metrics.service.ts` imports `PatientTrendData` from analytics feature module — layering inversion; by spec design (follow-up with shared types module if dependency graph grows) [src/services/metrics.service.ts]
+- Stale `selectedSessionId` shows all sessions with filter chip still active — by spec design (explicit fallback documented in Dev Notes; reset on patient navigation via useEffect) [src/features/analytics/components/PatientDashboard.tsx]
+- Single-session filter renders sparkline with 1 dot (no line) in PatientDashboard — acceptable MVP sparkline behavior; visually suboptimal but not a data error [src/features/analytics/components/PatientDashboard.tsx]
+
+## Deferred from: code review of 4-3-session-history-per-session-detail (2026-05-30)
+
+- Status coercion: any non-'complete' API value maps silently to 'incomplete' — by spec design; revisit if backend adds new statuses (e.g. 'cancelled', 'in_progress') [src/services/patients.service.ts]
+- Date-only ISO strings display off-by-one at UTC-5 — same class as 4.1/4.2 deferred; mitigated by spec guaranteeing full datetime strings [src/features/analytics/components/SessionHistory.tsx]
+- Invalid `sessionDate` string crashes entire session list render — `new Date(invalid)` → `Intl.DateTimeFormat.format()` throws RangeError; same class as 4.1/4.2; backend contract specifies valid ISO 8601 [src/features/analytics/components/SessionHistory.tsx]
+- `sps.toFixed(1)` throws/shows NaN if API returns null for sps — same class as 4.1 deferred; raw type declares `number` as non-nullable [src/features/analytics/components/SessionHistory.tsx]
+- `level[key]` undefined throws TypeError in LevelMetricCard — API omitting a metric (sparse level response) propagates as undefined; backend data quality issue [src/features/analytics/components/MetricDetailTable.tsx]
+- Sort stability with undefined `level` field — `a.level - b.level` evaluates to NaN, silently scrambles level order; backend data quality issue [src/features/analytics/components/MetricDetailTable.tsx]
+- Clickable session rows not keyboard-navigable — div with onClick has no role="button", tabIndex, or onKeyDown; MVP scope accessibility defer [src/features/analytics/components/SessionHistory.tsx]

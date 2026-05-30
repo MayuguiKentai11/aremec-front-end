@@ -5,7 +5,7 @@ type Props = {
 }
 
 export function CloudflareStreamPlayer({ streamId }: Props) {
-  if (!streamId) {
+  if (!streamId.trim()) {
     return (
       <div className="live-wrapper">
         <div

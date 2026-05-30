@@ -4,7 +4,7 @@ baseline_commit: 64bfdf25810ef39fa7e5cd27b1a2b6429265cacd
 
 # Story 3.4: Live VR Stream Embed
 
-Status: review
+Status: done
 
 ## Story
 
@@ -40,6 +40,13 @@ so that I can observe the patient's in-game behavior without interrupting the im
   - [x] Append line `VITE_CF_STREAM_ID=` after `VITE_WS_BASE_URL`
 
 - [x] **Verify `npm run build` passes (0 TypeScript errors)**
+
+### Review Findings
+
+- [x] [Review][Patch] Whitespace streamId (e.g., `" "`) bypasses `!streamId` guard — renders broken Cloudflare URL silently instead of showing placeholder [src/features/sessions/components/CloudflareStreamPlayer.tsx:8]
+- [x] [Review][Patch] `.env.example` missing trailing newline — file ends without `\n` after `VITE_CF_STREAM_ID=` [.env.example]
+- [x] [Review][Defer] `pendingSessionComplete` not reset by `resetActiveSession` — stale toast re-appears on patient detail page after normal session close [src/shared/components/AppShell.tsx] — deferred, pre-existing
+- [x] [Review][Defer] MetricsPanel TanStack Query not cancelled on session close — in-flight request may complete after unmount [src/features/sessions/components/MetricsPanel.tsx] — deferred, pre-existing
 
 ## Dev Notes
 

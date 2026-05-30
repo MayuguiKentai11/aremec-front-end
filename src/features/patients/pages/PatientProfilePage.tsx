@@ -5,6 +5,10 @@ import { usePatient } from '../hooks/usePatient'
 import { SessionOpenButton } from '../../sessions/components/SessionOpenButton'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
+import { PatientDashboard } from '../../analytics/components/PatientDashboard'
+import { TrendChart } from '../../analytics/components/TrendChart'
+import { SessionFilter } from '../../analytics/components/SessionFilter'
+import { SessionHistory } from '../../analytics/components/SessionHistory'
 
 type Tab = 'resumen' | 'historial' | 'sesion-activa'
 
@@ -19,11 +23,17 @@ export default function PatientProfilePage() {
   const showSessionTab = activePatientId === id
 
   const [activeTab, setActiveTab] = useState<Tab>('resumen')
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
 
   const { data: patient, isPending, error } = usePatient(id ?? '')
 
   useEffect(() => {
     setActiveTab('resumen')
+  }, [id])
+
+  // Reset filter when navigating between patients:
+  useEffect(() => {
+    setSelectedSessionId(null)
   }, [id])
 
   useEffect(() => {
@@ -105,10 +115,15 @@ export default function PatientProfilePage() {
       )}
 
       {activeTab === 'historial' && (
-        <div className="card">
-          <p style={{ color: 'var(--text2)', fontSize: 13 }}>
-            Historial de sesiones — disponible en Epic 4
-          </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <TrendChart patientId={id} />
+          <SessionFilter
+            patientId={id}
+            selectedSessionId={selectedSessionId}
+            onSelect={setSelectedSessionId}
+          />
+          <PatientDashboard patientId={id} selectedSessionId={selectedSessionId} />
+          <SessionHistory patientId={id} />
         </div>
       )}
 

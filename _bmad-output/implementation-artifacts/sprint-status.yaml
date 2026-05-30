@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: "2026-05-28"
-last_updated: "2026-05-29-3-4-review"
+last_updated: "2026-05-30-story-4-3-review"
 project: aremec-front-end
 project_key: NOKEY
 tracking_system: file-system
@@ -61,12 +61,12 @@ development_status:
   3-1-session-lifecycle-open-close-active-banner: done
   3-2-websocket-lifecycle-session-events: done
   3-3-real-time-metrics-panel: done
-  3-4-live-vr-stream-embed: review
-  epic-3-retrospective: optional
+  3-4-live-vr-stream-embed: done
+  epic-3-retrospective: done
 
   # ── Epic 4: Analytics & Clinical Follow-up ───────────────────────────────
-  epic-4: backlog
-  4-1-patient-dashboard-sps-trend: backlog
-  4-2-cognitive-trend-chart-session-filter: backlog
-  4-3-session-history-per-session-detail: backlog
+  epic-4: in-progress
+  4-1-patient-dashboard-sps-trend: done
+  4-2-cognitive-trend-chart-session-filter: done
+  4-3-session-history-per-session-detail: review
   epic-4-retrospective: optional

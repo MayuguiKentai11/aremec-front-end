@@ -4,6 +4,7 @@ import type {
   SessionMetrics,
   MLField,
 } from '../features/sessions/session.types'
+import type { PatientTrendData } from '../features/analytics/analytics.types'
 
 type LevelMetricsRaw = {
   level: number
@@ -57,5 +58,27 @@ export async function getSessionMetrics(
   return {
     sessionId: raw.session_id,
     levels: (raw.levels ?? []).map(toLevelMetrics),
+  }
+}
+
+type PatientTrendRaw = {
+  trend: 'rising' | 'stable' | 'falling'
+  slope: number
+  sessions: Array<{ session_date: string; sps: number }>
+}
+
+export async function getPatientTrend(
+  patientId: string
+): Promise<PatientTrendData> {
+  const raw = await api.get<PatientTrendRaw>(
+    `/patients/${encodeURIComponent(patientId)}/trend`
+  )
+  return {
+    trend: raw.trend,
+    slope: raw.slope,
+    sessions: (raw.sessions ?? []).map(s => ({
+      sessionDate: s.session_date,
+      sps: s.sps,
+    })),
   }
 }
