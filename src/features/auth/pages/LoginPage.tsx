@@ -21,16 +21,6 @@ export default function LoginPage() {
           >
             Iniciar sesión
           </button>
-          <button
-            className="btn btn-ghost btn-sm"
-            style={{ width: '100%' }}
-            disabled={!apiBase}
-            onClick={() => {
-              window.location.href = `${apiBase}/auth/forgot-password`
-            }}
-          >
-            ¿Olvidaste tu contraseña?
-          </button>
         </div>
       </div>
     </div>
