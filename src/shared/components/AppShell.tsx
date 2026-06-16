@@ -16,8 +16,13 @@ export default function AppShell() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <div className="logo-title">AREMEC</div>
-          <div className="logo-sub">PORTAL CLÍNICO</div>
+          <img src="/aremec_logo.png" alt="" className="sidebar-logo-mark" />
+          <div>
+            <div className="logo-title">
+              <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>
+            </div>
+            <div className="logo-sub">PORTAL CLÍNICO</div>
+          </div>
         </div>
         <nav className="nav">
           <div className="nav-label">PRINCIPAL</div>
