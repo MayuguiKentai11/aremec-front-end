@@ -12,15 +12,10 @@ export type PatientDashboardData = {
   sessions: SessionSummary[]
 }
 
-export type TrendSession = {
-  sessionDate: string // ISO 8601
-  sps: number
-}
-
 export type PatientTrendData = {
   trend: 'rising' | 'stable' | 'falling'
   slope: number
-  sessions: TrendSession[]
+  sessionsAnalyzed: number
 }
 
 export type SessionHistoryItem = {

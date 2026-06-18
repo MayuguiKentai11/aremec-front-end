@@ -73,8 +73,8 @@ export async function getSessionMetrics(
 
 type PatientTrendRaw = {
   trend: 'rising' | 'stable' | 'falling'
-  slope: number
-  sessions: Array<{ session_date: string; sps: number }>
+  slope_sps: number
+  sessions_analyzed: number
 }
 
 export async function getPatientTrend(
@@ -85,10 +85,7 @@ export async function getPatientTrend(
   )
   return {
     trend: raw.trend,
-    slope: raw.slope,
-    sessions: asArray<{ session_date: string; sps: number }>(raw?.sessions).map(s => ({
-      sessionDate: s.session_date,
-      sps: s.sps,
-    })),
+    slope: raw.slope_sps,
+    sessionsAnalyzed: raw.sessions_analyzed ?? 0,
   }
 }
