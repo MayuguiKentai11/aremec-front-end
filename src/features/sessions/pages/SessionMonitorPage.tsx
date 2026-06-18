@@ -54,6 +54,29 @@ export default function SessionMonitorPage() {
               <span className={`badge ${patient.status === 'active' ? 'badge-green' : 'badge-gray'}`}>
                 {patient.status === 'active' ? 'Activo' : 'Inactivo'}
               </span>
+
+              <dl className="patient-data-list">
+                <div className="patient-data-row">
+                  <dt>Edad</dt>
+                  <dd>{patient.age} años</dd>
+                </div>
+                <div className="patient-data-row">
+                  <dt>Género</dt>
+                  <dd>{patient.gender}</dd>
+                </div>
+                <div className="patient-data-row">
+                  <dt>Diagnóstico</dt>
+                  <dd>{DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}</dd>
+                </div>
+                <div className="patient-data-row">
+                  <dt>RAVLT (basal)</dt>
+                  <dd>{patient.baselineRavlt}</dd>
+                </div>
+                <div className="patient-data-row">
+                  <dt>SART (basal)</dt>
+                  <dd>{patient.baselineSart}</dd>
+                </div>
+              </dl>
             </div>
           ) : (
             <div style={{ color: 'var(--text3)', fontSize: 12, fontFamily: 'var(--mono)', marginTop: 8 }}>

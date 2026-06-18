@@ -893,10 +893,88 @@ tbody tr:last-child td {
   position: relative;
 }
 
-.metric-item:hover {
+.metric-item:hover,
+.metric-item:focus-visible {
   border-color: var(--accent);
   background: var(--surface);
   box-shadow: var(--shadow);
+  outline: none;
+  /* Lift the hovered card so its tooltip paints above sibling cards. */
+  z-index: 5;
+}
+
+/* ── METRIC HOVER TOOLTIP ── */
+.metric-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 220px;
+  padding: 8px 10px;
+  background: var(--brand-ink);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  z-index: 60;
+}
+
+.metric-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--brand-ink);
+}
+
+.metric-item:hover .metric-tooltip,
+.metric-item:focus-visible .metric-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── PATIENT-IN-SESSION DATA ── */
+.patient-data-list {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.patient-data-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.patient-data-row dt {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text2);
+}
+
+.patient-data-row dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--mono);
+  text-align: right;
 }
 
 .metric-val {

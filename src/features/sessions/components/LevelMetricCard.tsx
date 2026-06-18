@@ -22,7 +22,12 @@ export function LevelMetricCard({
   spsClass,
 }: Props) {
   return (
-    <div className="metric-item" title={description}>
+    <div className="metric-item" tabIndex={description ? 0 : undefined} aria-label={description}>
+      {description && (
+        <div className="metric-tooltip" role="tooltip">
+          {description}
+        </div>
+      )}
       <div className="metric-val">{formatNumber(value, 2)}</div>
       <div className="metric-abbr">{label}</div>
       {!HIDDEN_DOMAINS.has(domain) && (
