@@ -94,7 +94,7 @@ export function PatientDashboard({ patientId, selectedSessionId }: Props) {
           <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis dataKey="label" tick={{ fontSize: 11, fill: 'var(--text2)' }} />
-            <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: 'var(--text2)' }} />
+            <YAxis domain={[0, 1]} tick={{ fontSize: 11, fill: 'var(--text2)' }} />
             <Tooltip />
             <Line
               type="monotone"

@@ -4,19 +4,13 @@ import { useSessionHistory } from '../hooks/useSessionHistory'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { EmptyState } from '../../../shared/components/EmptyState'
-import { formatNumber, formatDate } from '../../../shared/utils/format'
+import { formatDate } from '../../../shared/utils/format'
 
 type Props = { patientId: string }
 
-const RECOMMENDATION_LABEL: Record<string, string> = {
-  increase_difficulty: 'Aumentar dificultad',
-  maintain_difficulty: 'Mantener dificultad',
-  decrease_difficulty: 'Reducir dificultad',
-}
-
 const SESSION_ROW_STYLE: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '1.5fr 1fr 1fr 2fr auto',
+  gridTemplateColumns: '1fr auto',
   gap: 12,
   padding: '10px 0',
   borderBottom: '1px solid var(--border)',
@@ -52,17 +46,6 @@ export function SessionHistory({ patientId }: Props) {
         >
           <div style={{ fontSize: 13 }}>
             {formatDate(session.sessionDate, { dateStyle: 'medium' })}
-          </div>
-          <div style={{ fontSize: 13, fontFamily: 'var(--font-mono, monospace)' }}>
-            SPS {formatNumber(session.sps, 1)}
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--text2)' }}>
-            {session.spsClass ?? '—'}
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--text2)' }}>
-            {session.recommendation
-              ? (RECOMMENDATION_LABEL[session.recommendation] ?? session.recommendation)
-              : '—'}
           </div>
           <span className={`badge ${session.status === 'complete' ? 'badge-green' : 'badge-warn'}`}>
             {session.status === 'complete' ? 'Completada' : 'Incompleta'}

@@ -61,22 +61,22 @@ export async function getPatient(id: string): Promise<Patient> {
 
 type SessionSummaryRaw = {
   session_id: string
-  session_date: string
+  started_at: string
   sps: number
   sps_class: string | null
   recommendation: string | null
 }
 
 type PatientDashboardRaw = {
-  global_trend: 'rising' | 'stable' | 'falling'
-  trend_slope: number
+  trend: 'rising' | 'stable' | 'falling'
+  slope?: number
   sessions: SessionSummaryRaw[]
 }
 
 function toSessionSummary(raw: SessionSummaryRaw): SessionSummary {
   return {
     sessionId: raw.session_id,
-    sessionDate: raw.session_date,
+    sessionDate: raw.started_at,
     sps: raw.sps,
     spsClass: raw.sps_class,
     recommendation: raw.recommendation,
@@ -88,18 +88,15 @@ export async function getDashboard(patientId: string): Promise<PatientDashboardD
     `/patients/${encodeURIComponent(patientId)}/dashboard`
   )
   return {
-    globalTrend: raw.global_trend,
-    trendSlope: raw.trend_slope,
+    globalTrend: raw.trend,
+    trendSlope: raw.slope ?? 0,
     sessions: asArray<SessionSummaryRaw>(raw?.sessions).map(toSessionSummary),
   }
 }
 
 type SessionHistoryItemRaw = {
   session_id: string
-  session_date: string
-  sps: number
-  sps_class: string | null
-  recommendation: string | null
+  started_at: string
   status: string
 }
 
@@ -109,10 +106,7 @@ export async function getSessionHistory(patientId: string): Promise<SessionHisto
   )
   return asArray<SessionHistoryItemRaw>(raw).map(s => ({
     sessionId: s.session_id,
-    sessionDate: s.session_date,
-    sps: s.sps,
-    spsClass: s.sps_class,
-    recommendation: s.recommendation,
-    status: s.status === 'complete' ? 'complete' : 'incomplete',
+    sessionDate: s.started_at,
+    status: s.status === 'completed' ? 'complete' : 'incomplete',
   }))
 }
