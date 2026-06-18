@@ -5,13 +5,7 @@ import { useSessionHistory } from '../../analytics/hooks/useSessionHistory'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { EmptyState } from '../../../shared/components/EmptyState'
-import { formatDate, formatNumber } from '../../../shared/utils/format'
-
-const REC_LABEL: Record<string, string> = {
-  increase_difficulty: 'Aumentar dificultad',
-  maintain_difficulty: 'Mantener dificultad',
-  decrease_difficulty: 'Reducir dificultad',
-}
+import { formatDate } from '../../../shared/utils/format'
 
 export default function SessionHistoryPage() {
   const navigate = useNavigate()
@@ -53,9 +47,6 @@ export default function SessionHistoryPage() {
               <thead>
                 <tr>
                   <th>FECHA</th>
-                  <th>SPS</th>
-                  <th>CLASIFICACIÓN</th>
-                  <th>RECOMENDACIÓN</th>
                   <th>ESTADO</th>
                 </tr>
               </thead>
@@ -77,19 +68,6 @@ export default function SessionHistoryPage() {
                       <span style={{ fontFamily: 'var(--mono)', fontSize: 11 }}>
                         {formatDate(s.sessionDate, { dateStyle: 'medium' })}
                       </span>
-                    </td>
-                    <td>
-                      <span style={{ fontFamily: 'var(--mono)', fontWeight: 700, color: 'var(--accent)' }}>
-                        {formatNumber(s.sps, 1)}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`badge ${s.spsClass === 'high' ? 'badge-green' : s.spsClass === 'medium' ? 'badge-warn' : 'badge-gray'}`}>
-                        {s.spsClass ?? '—'}
-                      </span>
-                    </td>
-                    <td style={{ fontSize: 12, color: 'var(--text2)' }}>
-                      {s.recommendation ? (REC_LABEL[s.recommendation] ?? s.recommendation) : '—'}
                     </td>
                     <td>
                       <span className={`badge ${s.status === 'complete' ? 'badge-green' : 'badge-warn'}`}>
