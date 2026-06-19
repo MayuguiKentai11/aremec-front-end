@@ -32,12 +32,13 @@ function sessionDomainValues(levels: LevelMetrics[]): Record<DomainMetricKey, nu
 export function useCognitiveDomains(
   sessionIds: string[],
   selectedSessionId: string | null,
+  enabled = true,
 ) {
   const results = useQueries({
     queries: sessionIds.map(id => ({
       queryKey: ['session', id, 'metrics'],
       queryFn: () => getSessionMetrics(id),
-      enabled: !!id,
+      enabled: enabled && !!id,
       staleTime: 5 * 60 * 1000,
     })),
   })

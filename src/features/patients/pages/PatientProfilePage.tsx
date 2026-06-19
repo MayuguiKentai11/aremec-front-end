@@ -110,7 +110,7 @@ export default function PatientProfilePage() {
           <SpsTrendChart rows={sessions.rows} globalTrend={sessions.globalTrend} />
 
           <div className="dashboard-two-col">
-            <CognitiveDomainPanel rows={sessions.rows} />
+            <CognitiveDomainPanel patientId={id} rows={sessions.rows} />
             <RecommendationDistribution rows={sessions.rows} />
           </div>
 

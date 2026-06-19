@@ -2,14 +2,14 @@ import { useState } from 'react'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
-import { useCognitiveDomains } from '../hooks/useCognitiveDomains'
+import { usePatientCognitiveDomains } from '../hooks/usePatientCognitiveDomains'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { EmptyState } from '../../../shared/components/EmptyState'
 import { formatDate, formatNumberMax } from '../../../shared/utils/format'
 import { DOMAIN_META } from '../analytics.constants'
 import type { SessionRow } from '../analytics.types'
 
-type Props = { rows: SessionRow[] }
+type Props = { patientId: string; rows: SessionRow[] }
 
 type RadarPoint = {
   domain: string
@@ -38,11 +38,11 @@ function DomainTooltip({ active, payload }: {
   )
 }
 
-export function CognitiveDomainPanel({ rows }: Props) {
+export function CognitiveDomainPanel({ patientId, rows }: Props) {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
   const sessionIds = rows.map(r => r.sessionId)
   const { aggregates, sessionsAggregated, isPending, hasData } =
-    useCognitiveDomains(sessionIds, selectedSessionId)
+    usePatientCognitiveDomains(patientId, sessionIds, selectedSessionId)
 
   if (rows.length === 0) {
     return <EmptyState message="Sin sesiones para analizar dominios" />
