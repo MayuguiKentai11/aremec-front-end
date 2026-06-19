@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppStore } from '../../../store/app.store'
 import { usePatient } from '../hooks/usePatient'
 import { SessionOpenButton } from '../../sessions/components/SessionOpenButton'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
-import { PatientDashboard } from '../../analytics/components/PatientDashboard'
-import { TrendChart } from '../../analytics/components/TrendChart'
-import { SessionFilter } from '../../analytics/components/SessionFilter'
-import { SessionHistory } from '../../analytics/components/SessionHistory'
+import { usePatientSessions } from '../../analytics/hooks/usePatientSessions'
+import { KpiStrip } from '../../analytics/components/KpiStrip'
+import { SpsTrendChart } from '../../analytics/components/SpsTrendChart'
+import { CognitiveDomainPanel } from '../../analytics/components/CognitiveDomainPanel'
+import { RecommendationDistribution } from '../../analytics/components/RecommendationDistribution'
+import { DashboardFilters } from '../../analytics/components/DashboardFilters'
+import { SessionTable } from '../../analytics/components/SessionTable'
+import { applySessionFilters, DEFAULT_FILTERS, type SessionFilters } from '../../analytics/analytics.filters'
 
 type Tab = 'resumen' | 'historial' | 'sesion-activa'
 
@@ -23,74 +27,69 @@ export default function PatientProfilePage() {
   const showSessionTab = activePatientId === id
 
   const [activeTab, setActiveTab] = useState<Tab>('resumen')
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
+  const [filters, setFilters] = useState<SessionFilters>(DEFAULT_FILTERS)
+
+  // Reset tab + filters when navigating between patients (render-phase pattern,
+  // see "You Might Not Need an Effect").
+  const [prevId, setPrevId] = useState(id)
+  if (id !== prevId) {
+    setPrevId(id)
+    setActiveTab('resumen')
+    setFilters(DEFAULT_FILTERS)
+  }
+
+  // Derive the visible tab so a closed active session never leaves us stranded.
+  const effectiveTab: Tab =
+    activeTab === 'sesion-activa' && !showSessionTab ? 'resumen' : activeTab
 
   const { data: patient, isPending, error } = usePatient(id ?? '')
-
-  useEffect(() => {
-    setActiveTab('resumen')
-  }, [id])
-
-  // Reset filter when navigating between patients:
-  useEffect(() => {
-    setSelectedSessionId(null)
-  }, [id])
-
-  useEffect(() => {
-    if (!showSessionTab) {
-      setActiveTab(prev => prev === 'sesion-activa' ? 'resumen' : prev)
-    }
-  }, [showSessionTab])
+  const sessions = usePatientSessions(id ?? '')
 
   if (!id) return <ErrorMessage error={new Error('Ruta inválida: falta el ID del paciente')} />
   if (isPending) return <LoadingSpinner />
   if (!patient) return <ErrorMessage error={error ?? new Error('Paciente no encontrado')} />
 
+  const initials = patient.name?.trim()
+    ? patient.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+    : '?'
+
+  const filteredRows = applySessionFilters(sessions.rows, filters)
+
   return (
     <div className="page">
       {error && <ErrorMessage error={error} />}
 
-      <div className="card" style={{ marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div className="patient-avatar" style={{ width: 56, height: 56, fontSize: 20 }}>
-            {patient.name?.trim()
-              ? patient.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase()
-              : '?'}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 20, fontWeight: 800 }}>{patient.name}</div>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'var(--mono)' }}>
-                {patient.age} años
-              </span>
-              <span style={{ fontSize: 12, color: 'var(--text2)', fontFamily: 'var(--mono)' }}>·</span>
-              <span style={{ fontSize: 12, color: 'var(--text2)' }}>
-                {DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}
-              </span>
-              <span className={`badge ${patient.status === 'active' ? 'badge-green' : 'badge-gray'}`}>
-                {patient.status === 'active' ? 'Activo' : 'Inactivo'}
-              </span>
-            </div>
+      <div className="card patient-header">
+        <div className="patient-avatar patient-avatar-lg">{initials}</div>
+        <div className="patient-header-info">
+          <div className="patient-header-name">{patient.name}</div>
+          <div className="patient-header-meta">
+            <span className="mono-muted">{patient.age} años</span>
+            <span className="mono-muted">·</span>
+            <span className="meta-muted">{DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}</span>
+            <span className={`badge ${patient.status === 'active' ? 'badge-green' : 'badge-gray'}`}>
+              {patient.status === 'active' ? 'Activo' : 'Inactivo'}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="tabs">
         <button
-          className={`tab${activeTab === 'resumen' ? ' active' : ''}`}
+          className={`tab${effectiveTab === 'resumen' ? ' active' : ''}`}
           onClick={() => setActiveTab('resumen')}
         >
           Resumen
         </button>
         <button
-          className={`tab${activeTab === 'historial' ? ' active' : ''}`}
+          className={`tab${effectiveTab === 'historial' ? ' active' : ''}`}
           onClick={() => setActiveTab('historial')}
         >
           Historial
         </button>
         {showSessionTab && (
           <button
-            className={`tab${activeTab === 'sesion-activa' ? ' active' : ''}`}
+            className={`tab${effectiveTab === 'sesion-activa' ? ' active' : ''}`}
             onClick={() => setActiveTab('sesion-activa')}
           >
             Sesión activa
@@ -98,23 +97,29 @@ export default function PatientProfilePage() {
         )}
       </div>
 
-      {activeTab === 'resumen' && (
-        <div>
-          <div className="card" style={{ maxWidth: 520, marginBottom: 24 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-              <div>
-                <div className="card-label">NOMBRE</div>
-                <div style={{ fontSize: 15, fontWeight: 600 }}>{patient.name}</div>
-              </div>
-              <div>
-                <div className="card-label">EDAD</div>
-                <div style={{ fontSize: 15 }}>{patient.age} años</div>
-              </div>
+      {effectiveTab === 'resumen' && (
+        <div className="dashboard-grid">
+          {sessions.error && <ErrorMessage error={sessions.error} />}
+
+          <KpiStrip
+            rows={sessions.rows}
+            globalTrend={sessions.globalTrend}
+            trendSlope={sessions.trendSlope}
+          />
+
+          <SpsTrendChart rows={sessions.rows} globalTrend={sessions.globalTrend} />
+
+          <div className="dashboard-two-col">
+            <CognitiveDomainPanel rows={sessions.rows} />
+            <RecommendationDistribution rows={sessions.rows} />
+          </div>
+
+          <div className="card">
+            <div className="card-label" style={{ marginBottom: 16 }}>FICHA CLÍNICA</div>
+            <div className="clinical-grid">
               <div>
                 <div className="card-label">DIAGNÓSTICO</div>
-                <div style={{ fontSize: 13 }}>
-                  {DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}
-                </div>
+                <div className="clinical-value">{DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}</div>
               </div>
               <div>
                 <div className="card-label">ESTADO</div>
@@ -124,36 +129,41 @@ export default function PatientProfilePage() {
               </div>
               <div>
                 <div className="card-label">RAVLT LÍNEA BASE</div>
-                <div className="card-sub" style={{ fontSize: 13 }}>{patient.baselineRavlt}</div>
+                <div className="clinical-value mono">{patient.baselineRavlt}</div>
               </div>
               <div>
                 <div className="card-label">SART LÍNEA BASE</div>
-                <div className="card-sub" style={{ fontSize: 13 }}>{patient.baselineSart}</div>
+                <div className="clinical-value mono">{patient.baselineSart}</div>
               </div>
             </div>
           </div>
+
           <SessionOpenButton patientId={patient.id} />
         </div>
       )}
 
-      {activeTab === 'historial' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <TrendChart patientId={id} />
-          <SessionFilter
-            patientId={id}
-            selectedSessionId={selectedSessionId}
-            onSelect={setSelectedSessionId}
-          />
-          <PatientDashboard patientId={id} selectedSessionId={selectedSessionId} />
-          <SessionHistory patientId={id} />
+      {effectiveTab === 'historial' && (
+        <div className="dashboard-grid">
+          {sessions.error && <ErrorMessage error={sessions.error} />}
+          {sessions.isPending
+            ? <LoadingSpinner />
+            : (
+              <>
+                <DashboardFilters
+                  filters={filters}
+                  onChange={setFilters}
+                  resultCount={filteredRows.length}
+                  totalCount={sessions.rows.length}
+                />
+                <SessionTable rows={filteredRows} patientId={id} />
+              </>
+            )}
         </div>
       )}
 
-      {activeTab === 'sesion-activa' && (
+      {effectiveTab === 'sesion-activa' && (
         <div className="card">
-          <p style={{ color: 'var(--text2)', fontSize: 13 }}>
-            Monitoreo de sesión activa — disponible en Epic 3
-          </p>
+          <p className="meta-muted">Monitoreo de sesión activa — disponible en Epic 3</p>
         </div>
       )}
     </div>
