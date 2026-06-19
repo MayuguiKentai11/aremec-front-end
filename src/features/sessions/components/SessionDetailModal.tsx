@@ -4,6 +4,7 @@ import { useSessionMetrics } from '../hooks/useSession'
 import { usePatient } from '../../patients/hooks/usePatient'
 import { RecommendationDisplay } from './RecommendationDisplay'
 import { MLFieldDisplay } from './MLFieldDisplay'
+import { MetricsOpinion } from './MetricsOpinion'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { EmptyState } from '../../../shared/components/EmptyState'
@@ -141,6 +142,9 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
                 <Sparkline values={levels.map(l => l.sps)} />
               </div>
             </div>
+
+            {/* Generative reading of the session (final level) */}
+            <MetricsOpinion level={last} />
 
             {/* Per-level progression table */}
             <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
