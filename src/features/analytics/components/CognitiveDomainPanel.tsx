@@ -103,7 +103,7 @@ export function CognitiveDomainPanel({ rows }: Props) {
             fillOpacity={0.12}
           />
           <Radar
-            name="Sesión seleccionada"
+            name="Última sesión"
             dataKey="latest"
             stroke="var(--accent)"
             fill="var(--accent)"

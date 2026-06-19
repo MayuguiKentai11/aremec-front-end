@@ -1,6 +1,33 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDashboard, getSessionHistory } from '../../../services/patients.service'
 import type { SessionRow } from '../analytics.types'
+import type { Trend } from '../analytics.constants'
+
+// Minimum |slope| (SPS per session) to call a trend rising/falling vs stable.
+const TREND_EPSILON = 0.005
+
+/**
+ * Least-squares slope of SPS over session order (chronological). Returns null
+ * when there aren't enough points. Computed client-side because the dashboard
+ * endpoint's own trend/slope are unreliable.
+ */
+function computeTrend(rows: SessionRow[]): { slope: number | null; trend: Trend } {
+  const ys = rows.map(r => r.sps).filter((v): v is number => v != null)
+  if (ys.length < 2) return { slope: null, trend: 'stable' }
+
+  const n = ys.length
+  const xMean = (n - 1) / 2
+  const yMean = ys.reduce((a, b) => a + b, 0) / n
+  let num = 0
+  let den = 0
+  ys.forEach((y, x) => {
+    num += (x - xMean) * (y - yMean)
+    den += (x - xMean) ** 2
+  })
+  const slope = den === 0 ? 0 : num / den
+  const trend: Trend = slope > TREND_EPSILON ? 'rising' : slope < -TREND_EPSILON ? 'falling' : 'stable'
+  return { slope, trend }
+}
 
 /**
  * Unified session feed for a patient: merges the dashboard summary
@@ -38,10 +65,12 @@ export function usePatientSessions(patientId: string) {
     }))
     .sort((a, b) => a.sessionDate.localeCompare(b.sessionDate))
 
+  const { slope, trend } = computeTrend(rows)
+
   return {
     rows,
-    globalTrend: dashboard.data?.globalTrend ?? null,
-    trendSlope: dashboard.data?.trendSlope ?? null,
+    globalTrend: rows.length >= 2 ? trend : null,
+    trendSlope: slope,
     isPending: dashboard.isPending,
     error: dashboard.error,
   }
