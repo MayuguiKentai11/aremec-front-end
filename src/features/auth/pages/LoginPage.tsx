@@ -5,10 +5,11 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-bg" />
       <div className="login-card" style={{ textAlign: 'center' }}>
-        <img src="/aremec_icon.png" alt="Logo de AREMEC" className="login-logo-mark" />
-        <div className="login-logo">
-          <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>
-        </div>
+        <img
+          src="/aremec-logo-stacked.svg"
+          alt="Aremec · Recordar, sentir, vivir"
+          className="login-logo-full"
+        />
         <div className="login-sub">Portal clínico</div>
         <div className="login-form">
           <button

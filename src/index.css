@@ -134,34 +134,17 @@ body,
   border-bottom: 1px solid var(--border);
 }
 
-.logo-title {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: var(--brand-ink);
-}
-
-/* Two-tone AREMEC wordmark (navy "ARE" + violet "MEC") */
-.wm-ink { color: var(--brand-ink); }
-.wm-gray { color: var(--brand-gray); }
-
 .sidebar-logo {
   display: flex;
   align-items: center;
   gap: 11px;
 }
 
-.sidebar-logo-mark {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-}
-
-.logo-sub {
-  font-size: 10px;
-  color: var(--text3);
-  font-weight: 500;
-  margin-top: 3px;
+/* Full lockup (mark + wordmark + tagline) supplied as artwork. */
+.sidebar-logo-full {
+  width: 100%;
+  max-width: 196px;
+  height: auto;
 }
 
 /* ── NAV ── */
@@ -1433,20 +1416,11 @@ tbody tr:last-child td {
   box-shadow: var(--shadow-lg);
 }
 
-.login-logo-mark {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 18px;
+.login-logo-full {
+  width: 176px;
+  height: auto;
+  margin: 0 auto 20px;
   display: block;
-  filter: drop-shadow(0 6px 16px rgba(var(--accent-rgb), 0.18));
-}
-
-.login-logo {
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  margin-bottom: 6px;
-  color: var(--brand-ink);
 }
 
 .login-sub {

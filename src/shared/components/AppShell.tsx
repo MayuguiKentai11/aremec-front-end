@@ -12,13 +12,7 @@ export default function AppShell() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <img src="/aremec_icon.png" alt="" className="sidebar-logo-mark" />
-          <div>
-            <div className="logo-title">
-              <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>
-            </div>
-            <div className="logo-sub">Portal clínico</div>
-          </div>
+          <img src="/aremec-logo-wide.svg" alt="Aremec · Recordar, sentir, vivir" className="sidebar-logo-full" />
         </div>
         <nav className="nav">
           <div className="nav-label">Principal</div>
