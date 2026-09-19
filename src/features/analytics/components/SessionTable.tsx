@@ -60,7 +60,7 @@ export function SessionTable({ rows, patientId }: Props) {
 
   return (
     <div className="card">
-      <div className="card-label" style={{ marginBottom: 12 }}>HISTORIAL DE SESIONES</div>
+      <div className="card-label" style={{ marginBottom: 12 }}>Historial de sesiones</div>
       <div className="data-table-wrap">
         <table className="data-table">
           <thead>

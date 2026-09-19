@@ -63,7 +63,7 @@ export function SpsTrendChart({ rows, globalTrend }: Props) {
     <div className="card">
       <div className="card-head-row">
         <div className="card-label">
-          EVOLUCIÓN DEL SPS
+          Evolución del SPS
           <InfoTip
             text={`${GLOSSARY.sps} ${GLOSSARY.mean} ${GLOSSARY.spsClass}`}
             label="evolución del SPS"

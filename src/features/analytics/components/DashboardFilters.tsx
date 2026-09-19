@@ -31,7 +31,7 @@ export function DashboardFilters({ filters, onChange, resultCount, totalCount }:
     <div className="filter-bar">
       <div className="filter-bar-head">
         <span className="filter-bar-title">
-          <Filter size={14} /> FILTROS
+          <Filter size={14} /> Filtros
         </span>
         <span className="filter-bar-count">
           {resultCount} de {totalCount} sesiones

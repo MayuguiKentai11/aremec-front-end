@@ -118,27 +118,27 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
             {/* Summary band */}
             <div className="card" style={{ display: 'flex', flexWrap: 'wrap', gap: 28, alignItems: 'center' }}>
               <div>
-                <div className="card-label">SPS FINAL</div>
+                <div className="card-label">SPS final</div>
                 <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 22, fontWeight: 700, color: 'var(--accent)' }}>
                   {formatNumberMax(last.sps, 3)}
                 </div>
               </div>
               <div>
-                <div className="card-label">CLASIFICACIÓN</div>
+                <div className="card-label">Clasificación</div>
                 <MLFieldDisplay field={last.spsClass} render={(v) => <span className="badge badge-blue">{v}</span>} />
               </div>
               <div>
-                <div className="card-label">RECOMENDACIÓN</div>
+                <div className="card-label">Recomendación</div>
                 <RecommendationDisplay recommendation={last.recommendation} />
               </div>
               <div>
-                <div className="card-label">NIVELES</div>
+                <div className="card-label">Niveles</div>
                 <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 22, fontWeight: 700 }}>
                   {levels.length}
                 </div>
               </div>
               <div style={{ marginLeft: 'auto' }}>
-                <div className="card-label">EVOLUCIÓN SPS</div>
+                <div className="card-label">Evolución SPS</div>
                 <Sparkline values={levels.map(l => l.sps)} />
               </div>
             </div>
@@ -152,12 +152,12 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
                 <table>
                   <thead>
                     <tr>
-                      <th rowSpan={2}>NIVEL</th>
-                      <th colSpan={3}>MEMORIA EPISÓDICA</th>
-                      <th colSpan={2}>ATENCIÓN SOSTENIDA</th>
+                      <th rowSpan={2}>Nivel</th>
+                      <th colSpan={3}>Memoria episódica</th>
+                      <th colSpan={2}>Atención sostenida</th>
                       <th rowSpan={2}>SPS</th>
-                      <th rowSpan={2}>CLASIF.</th>
-                      <th rowSpan={2}>RECOMENDACIÓN</th>
+                      <th rowSpan={2}>Clasif.</th>
+                      <th rowSpan={2}>Recomendación</th>
                     </tr>
                     <tr>
                       <th>ORS</th><th>ERS</th><th>SCS</th>
@@ -191,7 +191,7 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
             {/* Patient baseline reference */}
             {patient && (
               <div className="card">
-                <div className="card-label" style={{ marginBottom: 10 }}>LÍNEA BASE DEL PACIENTE (REFERENCIA)</div>
+                <div className="card-label" style={{ marginBottom: 10 }}>Línea base del paciente (referencia)</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 28 }}>
                   <div>
                     <div className="card-label">RAVLT · Memoria episódica</div>

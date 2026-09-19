@@ -29,7 +29,7 @@ export function RecommendationDistribution({ rows }: Props) {
   return (
     <div className="card">
       <div className="card-label" style={{ marginBottom: 12 }}>
-        RECOMENDACIONES DE DIFICULTAD
+        Recomendaciones de dificultad
         <InfoTip text={GLOSSARY.recommendation} label="recomendaciones de dificultad" align="right" />
       </div>
 

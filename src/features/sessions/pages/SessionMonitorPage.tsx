@@ -37,7 +37,7 @@ export default function SessionMonitorPage() {
           <CloudflareStreamPlayer streamId={CF_STREAM_ID ?? ''} />
         </div>
         <div className="card">
-          <div className="card-label">PACIENTE EN SESIÓN</div>
+          <div className="card-label">Paciente en sesión</div>
           {patient ? (
             <div style={{ marginTop: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>

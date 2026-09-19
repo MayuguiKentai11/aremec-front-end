@@ -36,7 +36,7 @@ export function KpiStrip({ rows, globalTrend, trendSlope }: Props) {
     <div className="kpi-strip">
       <div className="kpi accent-blue">
         <div className="kpi-head">
-          <Activity size={15} /> ÚLTIMO SPS
+          <Activity size={15} /> Último SPS
           <InfoTip text={GLOSSARY.sps} label="SPS" align="left" />
         </div>
         <div className="kpi-value">{formatNumberMax(last.sps, 3)}</div>
@@ -50,10 +50,10 @@ export function KpiStrip({ rows, globalTrend, trendSlope }: Props) {
 
       <div className="kpi accent-cyan">
         <div className="kpi-head">
-          <TrendIcon size={15} /> TENDENCIA
+          <TrendIcon size={15} /> Tendencia
           <InfoTip text={`${GLOSSARY.trend} ${GLOSSARY.slope}`} label="Tendencia" align="left" />
         </div>
-        <div className="kpi-value kpi-value-sm">{trend?.label ?? '—'}</div>
+        <div className="kpi-value">{trend?.label ?? '—'}</div>
         <div className="kpi-sub">
           pendiente {trendSlope != null ? formatNumber(trendSlope, 3) : '—'}
         </div>
@@ -61,7 +61,7 @@ export function KpiStrip({ rows, globalTrend, trendSlope }: Props) {
 
       <div className="kpi accent-amber">
         <div className="kpi-head">
-          <CalendarClock size={15} /> SESIONES
+          <CalendarClock size={15} /> Sesiones
           <InfoTip text={GLOSSARY.sessionsCount} label="Sesiones" align="right" />
         </div>
         <div className="kpi-value">{rows.length}</div>
@@ -70,10 +70,10 @@ export function KpiStrip({ rows, globalTrend, trendSlope }: Props) {
 
       <div className="kpi accent-rose">
         <div className="kpi-head">
-          <ClipboardList size={15} /> ÚLTIMA SESIÓN
+          <ClipboardList size={15} /> Última sesión
           <InfoTip text={GLOSSARY.lastSession} label="Última sesión" align="right" />
         </div>
-        <div className="kpi-value kpi-value-sm">
+        <div className="kpi-value">
           {formatDate(last.sessionDate, { dateStyle: 'medium' })}
         </div>
         <div className="kpi-sub">{formatRecommendation(last.recommendation)}</div>

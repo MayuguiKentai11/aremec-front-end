@@ -106,7 +106,7 @@ export function CloudflareStreamPlayer({ streamId }: Props) {
       {isLive && (
         <div className="live-badge">
           <div className="live-dot" />
-          EN VIVO
+          En vivo
         </div>
       )}
     </div>

@@ -17,11 +17,11 @@ export default function AppShell() {
             <div className="logo-title">
               <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>
             </div>
-            <div className="logo-sub">PORTAL CLÍNICO</div>
+            <div className="logo-sub">Portal clínico</div>
           </div>
         </div>
         <nav className="nav">
-          <div className="nav-label">PRINCIPAL</div>
+          <div className="nav-label">Principal</div>
           <NavLink
             to="/patients"
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
@@ -30,7 +30,7 @@ export default function AppShell() {
             Pacientes
           </NavLink>
 
-          <div className="nav-label">MONITOREO</div>
+          <div className="nav-label">Monitoreo</div>
           {activePatientId ? (
             <NavLink
               to={`/patients/${activePatientId}/session`}

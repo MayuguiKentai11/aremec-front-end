@@ -30,11 +30,11 @@ export function PatientList({ patients, isPending, error }: Props) {
         <table>
           <thead>
             <tr>
-              <th>PACIENTE</th>
-              <th>DIAGNÓSTICO</th>
-              <th>EDAD</th>
-              <th>ESTADO</th>
-              <th>ACCIONES</th>
+              <th>Paciente</th>
+              <th>Diagnóstico</th>
+              <th>Edad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>

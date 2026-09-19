@@ -72,7 +72,7 @@ export function CognitiveDomainPanel({ patientId, rows }: Props) {
     <div className="card">
       <div className="card-head-row">
         <div className="card-label">
-          DOMINIOS COGNITIVOS
+          Dominios cognitivos
           <InfoTip text={GLOSSARY.cognitiveDomains} label="dominios cognitivos" align="left" />
         </div>
         <select

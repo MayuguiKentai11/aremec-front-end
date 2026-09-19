@@ -9,7 +9,7 @@ export default function LoginPage() {
         <div className="login-logo">
           <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>
         </div>
-        <div className="login-sub">PORTAL CLÍNICO</div>
+        <div className="login-sub">Portal clínico</div>
         <div className="login-form">
           <button
             className="btn btn-primary"

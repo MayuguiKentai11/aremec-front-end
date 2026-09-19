@@ -52,8 +52,8 @@ export default function SessionHistoryPage() {
             <table>
               <thead>
                 <tr>
-                  <th>FECHA</th>
-                  <th>ESTADO</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>

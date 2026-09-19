@@ -67,6 +67,9 @@ export default function PatientProfilePage() {
             </span>
           </div>
         </div>
+        <div className="patient-header-actions">
+          <SessionOpenButton patientId={patient.id} />
+        </div>
       </div>
 
       <div className="tabs">
@@ -102,39 +105,37 @@ export default function PatientProfilePage() {
           </div>
 
           <div className="card">
-            <div className="card-label" style={{ marginBottom: 16 }}>FICHA CLÍNICA</div>
+            <div className="card-label" style={{ marginBottom: 16 }}>Ficha clínica</div>
             <div className="clinical-grid">
               <div>
                 <div className="card-label">
-                  DIAGNÓSTICO
+                  Diagnóstico
                   <InfoTip text={GLOSSARY.diagnosis} label="diagnóstico" align="left" />
                 </div>
                 <div className="clinical-value">{DIAGNOSIS_LABEL[patient.diagnosis] ?? patient.diagnosis}</div>
               </div>
               <div>
-                <div className="card-label">ESTADO</div>
+                <div className="card-label">Estado</div>
                 <span className={`badge ${patient.status === 'active' ? 'badge-green' : 'badge-gray'}`}>
                   {patient.status === 'active' ? 'Activo' : 'Inactivo'}
                 </span>
               </div>
               <div>
                 <div className="card-label">
-                  RAVLT LÍNEA BASE
+                  RAVLT línea base
                   <InfoTip text={GLOSSARY.ravlt} label="RAVLT línea base" align="center" />
                 </div>
                 <div className="clinical-value mono">{patient.baselineRavlt}</div>
               </div>
               <div>
                 <div className="card-label">
-                  SART LÍNEA BASE
+                  SART línea base
                   <InfoTip text={GLOSSARY.sart} label="SART línea base" align="right" />
                 </div>
                 <div className="clinical-value mono">{patient.baselineSart}</div>
               </div>
             </div>
           </div>
-
-          <SessionOpenButton patientId={patient.id} />
         </div>
       )}
 

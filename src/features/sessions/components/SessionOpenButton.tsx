@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { CircleDot } from 'lucide-react'
 import { useAppStore } from '../../../store/app.store'
 import { createSession } from '../../../services/sessions.service'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
@@ -39,6 +40,7 @@ export function SessionOpenButton({ patientId }: Props) {
           mutate()
         }}
       >
+        <CircleDot size={16} />
         {active.sessionId ? 'Ver sesión activa' : isPending ? 'Iniciando...' : 'Iniciar sesión'}
       </button>
       {error && <ErrorMessage error={error} />}
