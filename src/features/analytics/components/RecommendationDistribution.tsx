@@ -8,8 +8,8 @@ type Props = { rows: SessionRow[] }
 const ORDER = ['increase_difficulty', 'maintain_difficulty', 'decrease_difficulty'] as const
 
 const SEGMENT_COLOR: Record<string, string> = {
-  increase_difficulty: 'var(--accent)',
-  maintain_difficulty: 'var(--accent2)',
+  increase_difficulty: 'var(--sky)',
+  maintain_difficulty: 'var(--sky-soft)',
   decrease_difficulty: 'var(--warn)',
 }
 

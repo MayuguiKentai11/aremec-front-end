@@ -44,13 +44,13 @@ function Sparkline({ values }: { values: number[] }) {
 }
 
 const OVERLAY_STYLE: React.CSSProperties = {
-  position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)',
+  position: 'fixed', inset: 0, background: 'rgba(var(--ink-rgb), 0.45)',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   padding: 24, zIndex: 1000,
 }
 const DIALOG_STYLE: React.CSSProperties = {
   background: 'var(--bg, #fff)', borderRadius: 12, width: '100%', maxWidth: 920,
-  maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+  maxHeight: '90vh', overflow: 'auto', boxShadow: 'var(--shadow-lg)',
   padding: 24,
 }
 

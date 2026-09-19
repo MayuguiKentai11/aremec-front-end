@@ -12,7 +12,7 @@ export default function AppShell() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <img src="/aremec_logo.png" alt="" className="sidebar-logo-mark" />
+          <img src="/aremec_icon.png" alt="" className="sidebar-logo-mark" />
           <div>
             <div className="logo-title">
               <span className="wm-ink">ARE</span><span className="wm-gray">MEC</span>

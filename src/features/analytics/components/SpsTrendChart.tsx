@@ -1,5 +1,5 @@
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine,
+  AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine,
   ResponsiveContainer, CartesianGrid,
 } from 'recharts'
 import { EmptyState } from '../../../shared/components/EmptyState'
@@ -78,7 +78,13 @@ export function SpsTrendChart({ rows, globalTrend }: Props) {
         )}
       </div>
       <ResponsiveContainer width="100%" height={220}>
-        <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+        <AreaChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="spsFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.18} />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis dataKey="label" tick={{ fontSize: 11, fill: 'var(--text2)' }} />
           <YAxis domain={[0, 1]} tick={{ fontSize: 11, fill: 'var(--text2)' }} />
@@ -94,16 +100,17 @@ export function SpsTrendChart({ rows, globalTrend }: Props) {
               fill: 'var(--text2)',
             }}
           />
-          <Line
+          <Area
             type="monotone"
             dataKey="sps"
             stroke="var(--accent)"
             strokeWidth={2}
-            dot={{ r: 3 }}
+            fill="url(#spsFill)"
+            dot={{ r: 3, fill: 'var(--surface)', stroke: 'var(--accent)', strokeWidth: 1.5 }}
             activeDot={{ r: 5 }}
             connectNulls
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   )
