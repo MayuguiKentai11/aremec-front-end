@@ -4,57 +4,6 @@
    está montada), así que el resto de la app y el sidebar no cambian.
    ───────────────────────────────────────────────────────────────────────── */
 
-/* ── SF Pro (archivos del paquete oficial, subset Latin, en public/fonts) ──
-   Text para tamaños <20px y Display para ≥20px, como indica Apple. */
-@font-face {
-  font-family: 'SF Pro Dashboard Text';
-  src: url('/fonts/SF-Pro-Text-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Text';
-  src: url('/fonts/SF-Pro-Text-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Text';
-  src: url('/fonts/SF-Pro-Text-Semibold.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Text';
-  src: url('/fonts/SF-Pro-Text-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Display';
-  src: url('/fonts/SF-Pro-Display-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Display';
-  src: url('/fonts/SF-Pro-Display-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Display';
-  src: url('/fonts/SF-Pro-Display-Semibold.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'SF Pro Dashboard Display';
-  src: url('/fonts/SF-Pro-Display-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-
 /* Topbar + canvas, solo mientras el dashboard está montado */
 .main:has(.patient-dashboard) {
   background: #f4fafe;
@@ -86,8 +35,8 @@
 
 /* ── Tokens del dashboard ── */
 .patient-dashboard {
-  --db-font: "SF Pro Dashboard Text", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
-  --db-font-display: "SF Pro Dashboard Display", "SF Pro Display", var(--db-font);
+  --db-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
+  --db-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
   --font: var(--db-font);
   --mono: var(--db-font);
 
