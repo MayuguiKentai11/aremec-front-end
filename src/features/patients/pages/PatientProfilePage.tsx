@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import '../../analytics/patient-dashboard.css'
 import { usePatient } from '../hooks/usePatient'
 import { SessionOpenButton } from '../../sessions/components/SessionOpenButton'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
@@ -51,7 +52,7 @@ export default function PatientProfilePage() {
   const filteredRows = applySessionFilters(sessions.rows, filters)
 
   return (
-    <div className="page">
+    <div className="page patient-dashboard">
       {error && <ErrorMessage error={error} />}
 
       <div className="card patient-header">
