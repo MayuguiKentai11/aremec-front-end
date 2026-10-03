@@ -81,8 +81,8 @@ export function SpsTrendChart({ rows, globalTrend }: Props) {
         <AreaChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="spsFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.18} />
-              <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="var(--chart-line)" stopOpacity={0.16} />
+              <stop offset="100%" stopColor="var(--chart-line)" stopOpacity={0.02} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -103,10 +103,10 @@ export function SpsTrendChart({ rows, globalTrend }: Props) {
           <Area
             type="monotone"
             dataKey="sps"
-            stroke="var(--accent)"
+            stroke="var(--chart-line)"
             strokeWidth={2}
             fill="url(#spsFill)"
-            dot={{ r: 3, fill: 'var(--surface)', stroke: 'var(--accent)', strokeWidth: 1.5 }}
+            dot={{ r: 3, fill: 'var(--surface)', stroke: 'var(--chart-line)', strokeWidth: 1.5 }}
             activeDot={{ r: 5 }}
             connectNulls
           />

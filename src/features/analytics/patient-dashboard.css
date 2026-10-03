@@ -1,0 +1,370 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Dashboard del paciente — replica del frame "DASHBOARD" de Figma.
+   Todo está acotado a .patient-dashboard (y al topbar cuando esta página
+   está montada), así que el resto de la app y el sidebar no cambian.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Topbar + canvas, solo mientras el dashboard está montado */
+.main:has(.patient-dashboard) {
+  background: #f4fafe;
+  font-family: var(--db-font);
+}
+
+.main:has(.patient-dashboard) .topbar {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
+  box-shadow: none;
+  padding: 16px 14px 0 22px;
+  align-items: flex-start;
+}
+
+.main:has(.patient-dashboard) .page-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #46466c;
+}
+
+.main:has(.patient-dashboard) .page-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: #c1c8d7;
+  margin-top: 2px;
+}
+
+/* ── Tokens del dashboard ── */
+.patient-dashboard {
+  --db-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
+  --db-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
+  --font: var(--db-font);
+  --mono: var(--db-font);
+
+  --accent: #4842fa;
+  --accent-hover: #3b35e6;
+  --accent-rgb: 72, 66, 250;
+  --accent-soft: rgba(72, 66, 250, 0.08);
+  --accent-ring: rgba(72, 66, 250, 0.2);
+  --chart-line: #6a66c4;
+
+  --surface: #fdfdfd;
+  --surface2: #f7f9fd;
+  --surface3: #edf4fd;
+  --border: #eff4f9;
+  --border-strong: #e3e6f2;
+  --text: #46466c;
+  --text2: #9aa2b9;
+  --text3: #a1a9bd;
+
+  padding: 0 14px 20px 22px;
+  font-family: var(--db-font);
+  font-variant-numeric: tabular-nums;
+}
+
+.patient-dashboard .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: none;
+}
+
+.patient-dashboard .card-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6e6fb1;
+  margin-bottom: 0;
+}
+
+/* ── Header del paciente ── */
+.patient-dashboard .patient-header.card {
+  padding: 18px 22px;
+  margin-bottom: 14px;
+  gap: 18px;
+  border-radius: 14px;
+  background: #fcfdfd;
+}
+
+.patient-dashboard .patient-avatar-lg {
+  width: 64px;
+  height: 64px;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: linear-gradient(135deg, #5854fc 0%, #6f6bf8 100%);
+  box-shadow: none;
+}
+
+.patient-dashboard .patient-header-name {
+  font-size: 23px;
+  font-weight: 700;
+  color: #515175;
+  letter-spacing: -0.01em;
+}
+
+.patient-dashboard .patient-header-meta {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.patient-dashboard .mono-muted {
+  font-family: var(--db-font);
+  font-size: 13px;
+  color: #9fa6be;
+}
+
+.patient-dashboard .meta-muted {
+  font-size: 13px;
+  color: #9fa6be;
+}
+
+.patient-dashboard .badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.patient-dashboard .badge-green {
+  background: #e0fcec;
+  color: #70bc99;
+}
+
+.patient-dashboard .badge-gray {
+  background: #eef0f6;
+  color: #9aa2b9;
+}
+
+.patient-dashboard .patient-header-actions {
+  max-width: none;
+}
+
+.patient-dashboard .patient-header-actions .btn-primary {
+  height: 49px;
+  min-width: 189px;
+  padding: 0 22px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.patient-dashboard .patient-header-actions .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.28);
+}
+
+/* ── Tabs (segmented control) ── */
+.patient-dashboard .tabs {
+  margin-bottom: 14px;
+  padding: 4px;
+  border: none;
+  border-radius: 10px;
+  background: var(--surface3);
+  box-shadow: none;
+}
+
+.patient-dashboard .tab {
+  padding: 9px 26px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8591af;
+  border-radius: 8px;
+}
+
+.patient-dashboard .tab.active {
+  color: #7273c6;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: none;
+}
+
+/* ── KPI strip ── */
+.patient-dashboard .dashboard-grid {
+  gap: 12px;
+}
+
+.patient-dashboard .kpi-strip {
+  gap: 12px;
+}
+
+.patient-dashboard .kpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 112px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: #fcfdfd;
+  border: 1px solid #f1f7fd;
+  box-shadow: none;
+}
+
+.patient-dashboard .kpi-icon {
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--kpi-tone);
+  background: var(--kpi-tint);
+}
+
+.patient-dashboard .kpi.accent-blue,
+.patient-dashboard .kpi.accent-cyan,
+.patient-dashboard .kpi.accent-rose {
+  --kpi-tone: #4f4fd0;
+  --kpi-tint: #e4e8fc;
+}
+
+.patient-dashboard .kpi.accent-amber {
+  --kpi-tone: #2fb67a;
+  --kpi-tint: #e0fcec;
+}
+
+.patient-dashboard .kpi-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.patient-dashboard .kpi-head {
+  height: auto;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #a1a9bd;
+}
+
+.patient-dashboard .kpi-value {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #4e4d71;
+}
+
+.patient-dashboard .kpi.accent-cyan .kpi-value {
+  font-family: var(--db-font);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  color: #5e5e7a;
+}
+
+.patient-dashboard .kpi-sub,
+.patient-dashboard .kpi-delta {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #a5acc0;
+}
+
+.patient-dashboard .kpi.accent-amber .kpi-value,
+.patient-dashboard .kpi.accent-rose .kpi-value {
+  font-weight: 700;
+  color: #3e3e60;
+}
+
+.patient-dashboard .kpi-delta {
+  font-weight: 600;
+}
+
+.patient-dashboard .kpi-delta-up   { color: #1fa463; }
+.patient-dashboard .kpi-delta-down { color: #d38387; }
+.patient-dashboard .kpi-delta-flat { color: #a5acc0; }
+
+/* ── Evolución del SPS ── */
+.patient-dashboard .card-head-row {
+  margin-bottom: 8px;
+}
+
+.patient-dashboard .badge-inline {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.patient-dashboard .badge-warn {
+  background: #fbf1e4;
+  color: #dea077;
+}
+
+.patient-dashboard .chart-tooltip {
+  border-radius: 10px;
+}
+
+/* ── Dominios cognitivos / Recomendaciones ── */
+.patient-dashboard .dashboard-two-col {
+  grid-template-columns: 1.35fr 1fr;
+  gap: 12px;
+}
+
+.patient-dashboard .card-note {
+  font-size: 10px;
+  color: #bfc5d3;
+  margin: 0 0 8px;
+}
+
+.patient-dashboard .filter-select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border-color: var(--border-strong);
+  font-size: 12px;
+  color: #6d6d8e;
+  background: var(--surface);
+}
+
+.patient-dashboard .dist-bar {
+  height: 12px;
+  margin-bottom: 16px;
+  background: #ecf1fd;
+}
+
+.patient-dashboard .dist-legend {
+  gap: 12px;
+}
+
+.patient-dashboard .dist-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.patient-dashboard .dist-legend-label {
+  font-size: 12px;
+  color: #a2abc1;
+}
+
+.patient-dashboard .dist-legend-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6d6d8e;
+}
+
+/* ── Ficha clínica ── */
+.patient-dashboard .clinical-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4e4d71;
+}
+
+/* ── Textos ≥20px: SF Pro Display ── */
+.main:has(.patient-dashboard) .page-title,
+.patient-dashboard .patient-header-name,
+.patient-dashboard .patient-avatar-lg,
+.patient-dashboard .kpi-value {
+  font-family: var(--db-font-display);
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .patient-dashboard .dashboard-two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-dashboard .kpi-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
