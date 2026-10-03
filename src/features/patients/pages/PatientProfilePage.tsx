@@ -49,7 +49,7 @@ export default function PatientProfilePage() {
     ? patient.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase()
     : '?'
 
-  const filteredRows = applySessionFilters(sessions.rows, filters)
+  const filteredRows = applySessionFilters(sessions.historyRows, filters)
 
   return (
     <div className="page patient-dashboard">
@@ -142,8 +142,8 @@ export default function PatientProfilePage() {
 
       {activeTab === 'historial' && (
         <div className="dashboard-grid">
-          {sessions.error && <ErrorMessage error={sessions.error} />}
-          {sessions.isPending
+          {sessions.historyError && <ErrorMessage error={sessions.historyError} />}
+          {sessions.historyPending
             ? <LoadingSpinner />
             : (
               <>
@@ -151,7 +151,7 @@ export default function PatientProfilePage() {
                   filters={filters}
                   onChange={setFilters}
                   resultCount={filteredRows.length}
-                  totalCount={sessions.rows.length}
+                  totalCount={sessions.historyRows.length}
                 />
                 <SessionTable rows={filteredRows} patientId={id} />
               </>

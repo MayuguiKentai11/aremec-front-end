@@ -65,13 +65,34 @@ export function usePatientSessions(patientId: string) {
     }))
     .sort((a, b) => a.sessionDate.localeCompare(b.sessionDate))
 
+  // Full session list (every session in the history endpoint), enriched with
+  // SPS data from the dashboard when it exists. Used by the Historial tab so it
+  // doesn't depend on which sessions the dashboard summary includes.
+  const dashboardById = new Map(rows.map(r => [r.sessionId, r]))
+  const historyRows: SessionRow[] = (history.data ?? [])
+    .map(h => {
+      const d = dashboardById.get(h.sessionId)
+      return {
+        sessionId: h.sessionId,
+        sessionDate: h.sessionDate,
+        sps: d?.sps ?? null,
+        spsClass: d?.spsClass ?? null,
+        recommendation: d?.recommendation ?? null,
+        status: h.status,
+      }
+    })
+    .sort((a, b) => a.sessionDate.localeCompare(b.sessionDate))
+
   const { slope, trend } = computeTrend(rows)
 
   return {
     rows,
+    historyRows,
     globalTrend: rows.length >= 2 ? trend : null,
     trendSlope: slope,
     isPending: dashboard.isPending,
     error: dashboard.error,
+    historyPending: history.isPending,
+    historyError: history.error,
   }
 }
