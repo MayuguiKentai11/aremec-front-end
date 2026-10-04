@@ -12,6 +12,7 @@
 }
 
 .main:has(.patient-dashboard) .topbar {
+  position: static;
   background: transparent;
   backdrop-filter: none;
   border-bottom: none;
