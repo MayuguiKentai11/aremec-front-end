@@ -391,6 +391,13 @@
   border-color: var(--accent);
 }
 
+/* ── Filas sin métricas (celda unida) ── */
+.patient-dashboard .td-empty {
+  font-size: 13px;
+  font-style: italic;
+  color: #8a94b8;
+}
+
 /* ── Ficha clínica ── */
 .patient-dashboard .clinical-value {
   font-size: 15px;

@@ -1,7 +1,7 @@
-import type { SessionRow } from './analytics.types'
+import type { SessionRow, SessionState } from './analytics.types'
 
 export type PeriodFilter = 'all' | '30d' | '90d' | 'custom'
-export type StatusFilter = 'all' | 'complete' | 'incomplete'
+export type StatusFilter = 'all' | SessionState
 
 export type SessionFilters = {
   period: PeriodFilter

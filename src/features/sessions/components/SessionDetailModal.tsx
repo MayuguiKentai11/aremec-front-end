@@ -6,6 +6,8 @@ import { RecommendationDisplay } from './RecommendationDisplay'
 import { MLFieldDisplay } from './MLFieldDisplay'
 import { MetricsOpinion } from './MetricsOpinion'
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
+import { SESSION_STATE_META } from '../../analytics/analytics.constants'
+import type { SessionState } from '../../analytics/analytics.types'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { EmptyState } from '../../../shared/components/EmptyState'
 import { formatNumber, formatNumberMax, formatDate } from '../../../shared/utils/format'
@@ -15,7 +17,7 @@ type Props = {
   sessionId: string
   patientId?: string
   sessionDate?: string
-  status?: 'complete' | 'incomplete'
+  status?: SessionState
   onClose: () => void
 }
 
@@ -97,8 +99,8 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {status && (
-              <span className={`badge ${status === 'complete' ? 'badge-green' : 'badge-warn'}`}>
-                {status === 'complete' ? 'Completada' : 'Incompleta'}
+              <span className={`badge ${SESSION_STATE_META[status].badge}`}>
+                {SESSION_STATE_META[status].label}
               </span>
             )}
             <button onClick={onClose} className="btn btn-ghost btn-sm" aria-label="Cerrar">

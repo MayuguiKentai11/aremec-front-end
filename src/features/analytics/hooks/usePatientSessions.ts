@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDashboard, getSessionHistory } from '../../../services/patients.service'
 import type { SessionRow } from '../analytics.types'
-import type { Trend } from '../analytics.constants'
+import { resolveSessionState, type Trend } from '../analytics.constants'
 
 // Minimum |slope| (SPS per session) to call a trend rising/falling vs stable.
 const TREND_EPSILON = 0.005
@@ -55,14 +55,17 @@ export function usePatientSessions(patientId: string) {
   )
 
   const rows: SessionRow[] = (dashboard.data?.sessions ?? [])
-    .map(s => ({
-      sessionId: s.sessionId,
-      sessionDate: s.sessionDate,
-      sps: s.sps,
-      spsClass: s.spsClass,
-      recommendation: s.recommendation,
-      status: statusById.get(s.sessionId) ?? null,
-    }))
+    .map(s => {
+      const backendStatus = statusById.get(s.sessionId)
+      return {
+        sessionId: s.sessionId,
+        sessionDate: s.sessionDate,
+        sps: s.sps,
+        spsClass: s.spsClass,
+        recommendation: s.recommendation,
+        status: backendStatus ? resolveSessionState(backendStatus, s.sps != null) : null,
+      }
+    })
     .sort((a, b) => a.sessionDate.localeCompare(b.sessionDate))
 
   // Full session list (every session in the history endpoint), enriched with
@@ -72,13 +75,14 @@ export function usePatientSessions(patientId: string) {
   const historyRows: SessionRow[] = (history.data ?? [])
     .map(h => {
       const d = dashboardById.get(h.sessionId)
+      const hasData = d?.sps != null
       return {
         sessionId: h.sessionId,
         sessionDate: h.sessionDate,
         sps: d?.sps ?? null,
         spsClass: d?.spsClass ?? null,
         recommendation: d?.recommendation ?? null,
-        status: h.status,
+        status: resolveSessionState(h.status, hasData),
       }
     })
     .sort((a, b) => a.sessionDate.localeCompare(b.sessionDate))

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react'
 import { EmptyState } from '../../../shared/components/EmptyState'
 import { formatDate, formatNumberMax } from '../../../shared/utils/format'
-import { formatRecommendation, RECOMMENDATION_BADGE } from '../analytics.constants'
+import { formatRecommendation, RECOMMENDATION_BADGE, SESSION_STATE_META } from '../analytics.constants'
 import type { SessionRow } from '../analytics.types'
 
 type Props = { rows: SessionRow[]; patientId: string }
@@ -99,22 +99,34 @@ export function SessionTable({ rows, patientId }: Props) {
                 }}
               >
                 <td>{formatDate(row.sessionDate, { dateStyle: 'medium' })}</td>
-                <td className="td-mono">{formatNumberMax(row.sps, 3)}</td>
-                <td className="td-muted">{row.spsClass ?? '—'}</td>
-                <td>
-                  {row.recommendation
-                    ? (
-                      <span className={`badge ${RECOMMENDATION_BADGE[row.recommendation] ?? 'badge-gray'}`}>
-                        {formatRecommendation(row.recommendation)}
-                      </span>
-                    )
-                    : <span className="td-muted">—</span>}
-                </td>
+                {row.sps == null
+                  ? (
+                    <td colSpan={3} className="td-empty">
+                      {row.status === 'in_progress'
+                        ? 'Sesión en curso, sin métricas todavía'
+                        : 'Sin métricas registradas'}
+                    </td>
+                  )
+                  : (
+                    <>
+                      <td className="td-mono">{formatNumberMax(row.sps, 3)}</td>
+                      <td className="td-muted">{row.spsClass ?? '—'}</td>
+                      <td>
+                        {row.recommendation
+                          ? (
+                            <span className={`badge ${RECOMMENDATION_BADGE[row.recommendation] ?? 'badge-gray'}`}>
+                              {formatRecommendation(row.recommendation)}
+                            </span>
+                          )
+                          : <span className="td-muted">—</span>}
+                      </td>
+                    </>
+                  )}
                 <td>
                   {row.status
                     ? (
-                      <span className={`badge ${row.status === 'complete' ? 'badge-green' : 'badge-warn'}`}>
-                        {row.status === 'complete' ? 'Completada' : 'Incompleta'}
+                      <span className={`badge ${SESSION_STATE_META[row.status].badge}`}>
+                        {SESSION_STATE_META[row.status].label}
                       </span>
                     )
                     : <span className="td-muted">—</span>}
