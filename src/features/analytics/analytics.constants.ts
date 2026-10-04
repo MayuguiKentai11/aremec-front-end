@@ -1,6 +1,24 @@
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import type { DomainMetricKey } from './analytics.types'
+import type { DomainMetricKey, SessionHistoryStatus, SessionState } from './analytics.types'
+
+export const SESSION_STATE_META: Record<SessionState, { label: string; badge: string }> = {
+  complete: { label: 'Completada', badge: 'badge-green' },
+  incomplete: { label: 'Incompleta', badge: 'badge-warn' },
+  in_progress: { label: 'En curso', badge: 'badge-blue' },
+  no_data: { label: 'Sin datos', badge: 'badge-gray' },
+}
+
+/**
+ * Combines the backend status with whether the session has any metrics. A
+ * session that the backend marks as completed but has no SPS is shown as
+ * "Sin datos", since nothing was actually played.
+ */
+export function resolveSessionState(status: SessionHistoryStatus, hasData: boolean): SessionState {
+  if (status === 'in_progress') return 'in_progress'
+  if (!hasData) return 'no_data'
+  return status
+}
 
 export type Trend = 'rising' | 'stable' | 'falling'
 

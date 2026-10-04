@@ -2,12 +2,13 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import type { Location } from 'react-router-dom'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { SessionDetailModal } from '../components/SessionDetailModal'
+import type { SessionState } from '../../analytics/analytics.types'
 
 type DetailState = {
   background?: Location
   patientId?: string
   sessionDate?: string
-  status?: 'complete' | 'incomplete'
+  status?: SessionState
 }
 
 export default function SessionDetailPage() {

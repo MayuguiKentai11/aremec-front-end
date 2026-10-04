@@ -107,6 +107,6 @@ export async function getSessionHistory(patientId: string): Promise<SessionHisto
   return asArray<SessionHistoryItemRaw>(raw).map(s => ({
     sessionId: s.session_id,
     sessionDate: s.started_at,
-    status: s.status === 'completed' ? 'complete' : 'incomplete',
+    status: s.status === 'completed' ? 'complete' : s.status === 'active' ? 'in_progress' : 'incomplete',
   }))
 }

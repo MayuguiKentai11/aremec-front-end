@@ -6,6 +6,8 @@ import { LoadingSpinner } from '../../../shared/components/LoadingSpinner'
 import { ErrorMessage } from '../../../shared/components/ErrorMessage'
 import { EmptyState } from '../../../shared/components/EmptyState'
 import { formatDate } from '../../../shared/utils/format'
+import { SESSION_STATE_META } from '../../analytics/analytics.constants'
+import type { SessionHistoryStatus } from '../../analytics/analytics.types'
 
 export default function SessionHistoryPage() {
   const navigate = useNavigate()
@@ -14,7 +16,7 @@ export default function SessionHistoryPage() {
   const { data: patients, isPending: loadingPatients } = usePatients()
   const { data: sessions, isPending: loadingSessions, error } = useSessionHistory(selectedPatientId)
 
-  const openDetail = (sessionId: string, sessionDate: string, status: 'complete' | 'incomplete') =>
+  const openDetail = (sessionId: string, sessionDate: string, status: SessionHistoryStatus) =>
     navigate(`/sessions/${sessionId}`, {
       state: { background: location, patientId: selectedPatientId, sessionDate, status },
     })
@@ -76,8 +78,8 @@ export default function SessionHistoryPage() {
                       </span>
                     </td>
                     <td>
-                      <span className={`badge ${s.status === 'complete' ? 'badge-green' : 'badge-warn'}`}>
-                        {s.status === 'complete' ? 'Completada' : 'Incompleta'}
+                      <span className={`badge ${SESSION_STATE_META[s.status].badge}`}>
+                        {SESSION_STATE_META[s.status].label}
                       </span>
                     </td>
                   </tr>

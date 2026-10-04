@@ -18,10 +18,17 @@ export type PatientTrendData = {
   sessionsAnalyzed: number
 }
 
+// What the user sees for a session. `no_data` = closed or created without any
+// metrics (no SPS), regardless of what the backend status says.
+export type SessionState = 'complete' | 'incomplete' | 'in_progress' | 'no_data'
+
+// Backend-level status from the history endpoint (before checking for metrics).
+export type SessionHistoryStatus = 'complete' | 'incomplete' | 'in_progress'
+
 export type SessionHistoryItem = {
   sessionId: string
   sessionDate: string // ISO 8601
-  status: 'complete' | 'incomplete'
+  status: SessionHistoryStatus
 }
 
 // Unified per-session row: dashboard summary (sps/class/recommendation)
@@ -33,7 +40,7 @@ export type SessionRow = {
   sps: number | null
   spsClass: string | null
   recommendation: string | null
-  status: 'complete' | 'incomplete' | null
+  status: SessionState | null
 }
 
 // Aggregated cognitive-domain metrics for the radar panel. One value per raw

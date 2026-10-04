@@ -16,8 +16,10 @@ const PERIODS: { value: Exclude<PeriodFilter, 'custom'>; label: string }[] = [
 
 const STATUSES: { value: StatusFilter; label: string }[] = [
   { value: 'all', label: 'Todas' },
-  { value: 'complete', label: 'Completas' },
+  { value: 'complete', label: 'Completadas' },
   { value: 'incomplete', label: 'Incompletas' },
+  { value: 'in_progress', label: 'En curso' },
+  { value: 'no_data', label: 'Sin datos' },
 ]
 
 export function DashboardFilters({ filters, onChange, resultCount, totalCount }: Props) {
