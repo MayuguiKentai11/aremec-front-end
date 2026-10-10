@@ -40,6 +40,9 @@ export default function AppShell() {
             </div>
           )}
         </nav>
+        <div className="sidebar-illustration">
+          <img src="/assets/img/aremec_usage.png" alt="" aria-hidden="true" />
+        </div>
       </aside>
       <div className="main">
         <Topbar />
