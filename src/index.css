@@ -18,26 +18,26 @@
   --surface5: #F2F3FA;
 
   /* ── Borders ── */
-  --border: #E8EAF5;
+  --border: #E5EAF2;
   --border-strong: #D9DCEE;
   --border-hover: #C9CDE6;
 
   /* ── Brand: indigo-violet (from the AREMEC puzzle icon) ── */
-  --accent-rgb: 94, 84, 227;
-  --accent: #5E54E3;
-  --accent-hover: #4B41CF;
-  --accent2: #8B80F0;
+  --accent-rgb: 107, 92, 231;
+  --accent: #6B5CE7;
+  --accent-hover: #5547D3;
+  --accent2: #C8B4FF;
   --accent-soft: rgba(var(--accent-rgb), 0.08);
   --accent-ring: rgba(var(--accent-rgb), 0.20);
 
   /* ── Brand wordmark (navy "ARE" + violet "MEC") and icon yellow ── */
   --brand-ink: #232A6B;
   --brand-gray: #7A6FF0;
-  --brand-yellow: #F4E27E;
+  --brand-yellow: #F7D94C;
 
   /* ── Data series: sky blues (recommendations, secondary series) ── */
-  --sky: #5AA8F0;
-  --sky-soft: #A9CFF6;
+  --sky: #3B82F6;
+  --sky-soft: #7CCBFF;
 
   /* ── Clinical status ── */
   --danger-rgb: 229, 72, 77;
@@ -1403,7 +1403,7 @@ tbody tr:last-child td {
   inset: 0;
   background:
     radial-gradient(ellipse at 18% 18%, rgba(var(--accent-rgb), .10) 0%, transparent 55%),
-    radial-gradient(ellipse at 82% 88%, rgba(244, 226, 126, .22) 0%, transparent 55%);
+    radial-gradient(ellipse at 82% 88%, rgba(247, 217, 76, .22) 0%, transparent 55%);
 }
 
 .login-card {
