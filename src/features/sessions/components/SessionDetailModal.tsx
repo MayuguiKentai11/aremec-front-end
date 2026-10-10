@@ -48,12 +48,11 @@ function Sparkline({ values }: { values: number[] }) {
 const OVERLAY_STYLE: React.CSSProperties = {
   position: 'fixed', inset: 0, background: 'rgba(var(--ink-rgb), 0.45)',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
-  padding: 24, zIndex: 1000,
+  zIndex: 1000,
 }
 const DIALOG_STYLE: React.CSSProperties = {
   background: 'var(--bg, #fff)', borderRadius: 12, width: '100%', maxWidth: 920,
   maxHeight: '90vh', overflow: 'auto', boxShadow: 'var(--shadow-lg)',
-  padding: 24,
 }
 
 export function SessionDetailModal({ sessionId, patientId, sessionDate, status, onClose }: Props) {
@@ -76,11 +75,13 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
 
   return (
     <div
+      className="session-detail-overlay"
       style={OVERLAY_STYLE}
       onClick={onClose}
       role="presentation"
     >
       <div
+        className="session-detail-dialog"
         style={DIALOG_STYLE}
         role="dialog"
         aria-modal="true"

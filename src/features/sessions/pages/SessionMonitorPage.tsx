@@ -32,7 +32,7 @@ export default function SessionMonitorPage() {
         <SessionCloseButton sessionId={sessionId} patientId={patientId ?? ''} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 20, marginBottom: 20 }}>
+      <div className="session-monitor-grid">
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <CloudflareStreamPlayer streamId={CF_STREAM_ID ?? ''} />
         </div>
