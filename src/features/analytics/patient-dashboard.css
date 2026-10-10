@@ -43,22 +43,22 @@
   --font: var(--db-font);
   --mono: var(--db-font);
 
-  --accent: #4840fc;
-  --accent-hover: #3a33e6;
-  --accent-rgb: 72, 64, 252;
-  --accent-soft: rgba(72, 64, 252, 0.08);
-  --accent-ring: rgba(72, 64, 252, 0.2);
-  --chart-line: #4a44d8;
+  --accent: #6B5CE7;
+  --accent-hover: #5649D3;
+  --accent-rgb: 107, 92, 231;
+  --accent-soft: rgba(107, 92, 231, 0.08);
+  --accent-ring: rgba(107, 92, 231, 0.2);
+  --chart-line: #6E62C6;
 
   /* Recomendaciones: segmentos de la barra y leyenda */
-  --sky: #64b4fc;
-  --sky-soft: #98ccfc;
+  --sky: #3B82F6;
+  --sky-soft: #7CCBFF;
   --warn: #f89840;
 
   --surface: #ffffff;
   --surface2: #f5f8fe;
   --surface3: #e9f0fc;
-  --border: #e4eaf6;
+  --border: #E5EAF2;
   --border-strong: #cfd8ee;
   --text: #000030;
   --text2: #3b4a80;
@@ -152,11 +152,11 @@
   font-size: 15px;
   font-weight: 600;
   background: var(--accent);
-  box-shadow: 0 6px 16px rgba(72, 64, 252, 0.3);
+  box-shadow: 0 6px 16px rgba(107, 92, 231, 0.3);
 }
 
 .patient-dashboard .patient-header-actions .btn-primary:hover:not(:disabled) {
-  box-shadow: 0 8px 20px rgba(72, 64, 252, 0.38);
+  box-shadow: 0 8px 20px rgba(107, 92, 231, 0.38);
 }
 
 /* ── Tabs (segmented control) ── */
