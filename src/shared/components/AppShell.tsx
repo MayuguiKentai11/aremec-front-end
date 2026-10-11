@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Users, Radio } from 'lucide-react'
+import { Users, Radio, ArrowRight } from 'lucide-react'
 import { useAppStore } from '../../store/app.store'
 import { ActiveSessionBanner } from '../../features/sessions/components/ActiveSessionBanner'
 import { SessionCompletionToast } from '../../features/sessions/components/SessionCompletionToast'
@@ -41,7 +41,19 @@ export default function AppShell() {
           )}
         </nav>
         <div className="sidebar-illustration">
-          <img src="/assets/img/aremec_usage.png" alt="" aria-hidden="true" />
+          <div className="sidebar-illustration-card">
+            <img src="/assets/img/aremec_usage.png" alt="" aria-hidden="true" />
+            <div className="sidebar-illustration-text">
+              <p>
+                <strong>Juntos,</strong>
+                <br />
+                la vida se siente más completa.
+              </p>
+              <span className="sidebar-illustration-arrow" aria-hidden="true">
+                <ArrowRight size={16} />
+              </span>
+            </div>
+          </div>
         </div>
       </aside>
       <div className="main">
