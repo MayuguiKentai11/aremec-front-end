@@ -148,7 +148,7 @@ textarea {
   gap: 11px;
 }
 
-/* Sidebar lockup (mark + tagline, no wordmark) supplied as artwork. */
+/* Sidebar lockup (mark + wordmark, no tagline) supplied as artwork. */
 .sidebar-logo-full {
   width: 100%;
   max-width: 196px;
