@@ -38,8 +38,8 @@
 
 /* ── Tokens del dashboard ── */
 .patient-dashboard {
-  --db-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
-  --db-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
+  --db-font: "Inter", system-ui, sans-serif;
+  --db-font-display: "Inter", system-ui, sans-serif;
   --font: var(--db-font);
   --mono: var(--db-font);
 

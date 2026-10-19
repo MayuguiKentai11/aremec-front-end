@@ -122,7 +122,7 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
             <div className="card" style={{ display: 'flex', flexWrap: 'wrap', gap: 28, alignItems: 'center' }}>
               <div>
                 <div className="card-label">SPS final</div>
-                <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 22, fontWeight: 700, color: 'var(--accent)' }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 22, fontWeight: 700, color: 'var(--accent)' }}>
                   {formatNumberMax(last.sps, 3)}
                 </div>
               </div>
@@ -136,7 +136,7 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
               </div>
               <div>
                 <div className="card-label">Niveles</div>
-                <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 22, fontWeight: 700 }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 22, fontWeight: 700 }}>
                   {levels.length}
                 </div>
               </div>
@@ -172,12 +172,12 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
                       <tr key={level.level}>
                         <td style={{ fontWeight: 700 }}>{level.level}</td>
                         {EPISODIC.map(k => (
-                          <td key={k} style={{ fontFamily: 'var(--font-mono, monospace)' }}>{formatNumber(level[k], 2)}</td>
+                          <td key={k} style={{ fontFamily: 'var(--mono)' }}>{formatNumber(level[k], 2)}</td>
                         ))}
                         {ATTENTION.map(k => (
-                          <td key={k} style={{ fontFamily: 'var(--font-mono, monospace)' }}>{formatNumber(level[k], 2)}</td>
+                          <td key={k} style={{ fontFamily: 'var(--mono)' }}>{formatNumber(level[k], 2)}</td>
                         ))}
-                        <td style={{ fontFamily: 'var(--font-mono, monospace)', fontWeight: 700, color: 'var(--accent)' }}>
+                        <td style={{ fontFamily: 'var(--mono)', fontWeight: 700, color: 'var(--accent)' }}>
                           {formatNumberMax(level.sps, 3)}
                         </td>
                         <td>
@@ -198,13 +198,13 @@ export function SessionDetailModal({ sessionId, patientId, sessionDate, status, 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 28 }}>
                   <div>
                     <div className="card-label">RAVLT · Memoria episódica</div>
-                    <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 16, fontWeight: 700 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 16, fontWeight: 700 }}>
                       {formatNumber(patient.baselineRavlt, 2)}
                     </div>
                   </div>
                   <div>
                     <div className="card-label">SART · Atención sostenida</div>
-                    <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 16, fontWeight: 700 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 16, fontWeight: 700 }}>
                       {formatNumber(patient.baselineSart, 2)}
                     </div>
                   </div>
