@@ -12,7 +12,7 @@ const PAGE_TITLES: Array<{ match: (p: string) => boolean } & PageTitle> = [
   { match: (p) => /^\/sessions\/[^/]+$/.test(p),            title: 'Detalle de Sesión',     sub: '' },
 ]
 
-const FALLBACK: PageTitle = { title: 'AREMEC', sub: '' }
+const FALLBACK: PageTitle = { title: '', sub: '' }
 
 export function Topbar() {
   const { pathname } = useLocation()
